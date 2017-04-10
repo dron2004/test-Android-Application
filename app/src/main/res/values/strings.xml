@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">TranslateApp</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_setting">Setting</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_translate">Translate</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="inputTextPlaceHolder">Input text to translate here</string>
+    <string name="buttonTranslateTitle">Translate</string>
+    <string name="buttonAddToFavoritesTitle">Add to Favorites</string>
+    <string name="internet_connection_required">This application require internet connection to get translation from Yandex API</string>
+    <string name="title_personal_section">Personal Setting</string>
+    <string name="title_fromLangPreference">Translate From</string>
+    <string name="title_toLangPreference">Translate To</string>
+    <string name="dialog_title_fromLangPreference">Select Your Language</string>
+    <string name="dialog_title_toLangPreference">Select Language for translation</string>
+    <string name="title_app_section">Application Setting</string>
+</resources>
