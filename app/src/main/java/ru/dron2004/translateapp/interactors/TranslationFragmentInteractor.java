@@ -8,10 +8,16 @@ import ru.dron2004.translateapp.ui.presenters.TranslateFragmentPresenter;
 public interface TranslationFragmentInteractor {
 
     /**
-     * Зарегистрировать Обратный вызов
+     * Зарегистрировать Обратный вызов перевода
      * @param callbackListner
      */
-    void registerCallback(Callback callbackListner);
+    void registerTranslationCallback(TranslationInteractorCallback callbackListner);
+
+    /**
+     * Зарегистрировать Обратный вызов перевода
+     * @param callbackListner
+     */
+    void registerTipsCallback(TipsInteractorCallback callbackListner);
 
     /**
      * Выполнить перевода текста
@@ -26,17 +32,20 @@ public interface TranslationFragmentInteractor {
     void getTipsForText(String text);
 
     //API обратного вызова
-    interface Callback {
-        /**
-         * Перевод выполнен
-         * @param translation
-         */
-        void onTranslation(Translation translation);
-
-        /**
-         * Подсказки получены
-         * @param tips
-         */
-        void onTipsCreated(List<String> tips);
-    }
+    interface TranslationInteractorCallback extends _BaseCallback<Translation>{}
+    interface TipsInteractorCallback extends _BaseCallback<List<String>>{}
+    //TODO Убедиться что новое подходит и Убить старое
+//    interface Callback {
+//        /**
+//         * Перевод выполнен
+//         * @param translation
+//         */
+//        void onTranslation(Translation translation);
+//
+//        /**
+//         * Подсказки получены
+//         * @param tips
+//         */
+//        void onTipsCreated(List<String> tips);
+//    }
 }

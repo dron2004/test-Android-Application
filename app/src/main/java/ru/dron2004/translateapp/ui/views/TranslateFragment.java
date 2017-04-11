@@ -18,12 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.dron2004.translateapp.R;
+import ru.dron2004.translateapp.interactors.TranslationFragmentInteractor;
 import ru.dron2004.translateapp.interactors.TranslationFragmentInteractorImpl;
+import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.ui.helpers.CustomTokenizer;
 import ru.dron2004.translateapp.ui.presenters.TranslateFragmentPresenterImpl;
 import ru.dron2004.translateapp.utility.WidgetUtils;
 
-public class TranslateFragment extends Fragment implements TranslateFragmentView {
+public class TranslateFragment extends Fragment implements TranslateFragmentView, TranslationFragmentInteractor.Callback {
 
     private TranslateFragmentPresenterImpl presenter;
 
@@ -40,7 +42,9 @@ public class TranslateFragment extends Fragment implements TranslateFragmentView
 
     public TranslateFragment() {
         // Required empty public constructor
-        presenter = new TranslateFragmentPresenterImpl(new TranslationFragmentInteractorImpl());
+        presenter =
+                new TranslateFragmentPresenterImpl(
+                    new TranslationFragmentInteractorImpl(this));
     }
 
     public static TranslateFragment newInstance() {
@@ -181,5 +185,15 @@ public class TranslateFragment extends Fragment implements TranslateFragmentView
         if (getActivity() != null) {
             Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onTranslation(Translation translation) {
+
+    }
+
+    @Override
+    public void onTipsCreated(List<String> tips) {
+
     }
 }
