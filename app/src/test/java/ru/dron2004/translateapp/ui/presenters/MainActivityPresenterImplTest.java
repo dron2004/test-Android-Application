@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import ru.dron2004.translateapp.interactors.MainActivityInteractor;
-import ru.dron2004.translateapp.model.PackageModel;
 import ru.dron2004.translateapp.ui.views.MainActivityView;
 
 import static org.mockito.Mockito.mock;
@@ -16,12 +15,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class MainActivityPresenterImplTest {
-    PackageModel fakeApp = mock(PackageModel.class);
     MainActivityView fakeView = mock(MainActivityView.class);
     MainActivityInteractor fakeInteractor = mock(MainActivityInteractor.class);
-    MainActivityView.PermissionCallback fakeListner = mock(MainActivityView.PermissionCallback.class);
 
-    MainActivityPresenter presenter = new MainActivityPresenterImpl(fakeApp,fakeInteractor);
+    MainActivityPresenter presenter = new MainActivityPresenterImpl(fakeInteractor);
 
     @Before
     public void setUp() throws Exception {
@@ -72,15 +69,8 @@ public class MainActivityPresenterImplTest {
 
     @Test
     public void showSettingFragment() throws Exception {
-        presenter.showSettingFragment();
-        verify(fakeView,times(1)).showSettingFragment();
-    }
-
-    @Test
-    public void test_InitActivity_FirstStart(){
-        presenter.firstStart();
-        verify(fakeView,times(1)).requestInternetPermission((MainActivityView.PermissionCallback) presenter);
-
+        presenter.showAboutFragment();
+        verify(fakeView,times(1)).showAboutFragment();
     }
 
 }

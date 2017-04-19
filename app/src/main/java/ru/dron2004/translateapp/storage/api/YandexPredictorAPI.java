@@ -10,6 +10,6 @@ public interface YandexPredictorAPI {
     public Call<String> getSupportedLanguages(@Query("key")String yaPredictorKey);
 
     @GET("/api/v1/predict.json/complete")
-    public Call<String> getComplete(@Query("key")String yaPredictorKey,@Query("lang")String language,@Query("limit")int limit);
+    public Call<String> getComplete(@Query("key")String yaPredictorKey,@Query("lang")String language,@Query("q")String text,@Query("limit")int limit);
 
 }

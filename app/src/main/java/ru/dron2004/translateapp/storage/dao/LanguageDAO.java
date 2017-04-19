@@ -4,7 +4,6 @@ import java.util.List;
 
 import ru.dron2004.translateapp.interactors._BaseCallback;
 import ru.dron2004.translateapp.model.Language;
-import ru.dron2004.translateapp.model.Translation;
 
 public interface LanguageDAO {
 
@@ -17,13 +16,13 @@ public interface LanguageDAO {
     /**
      * Получить список языков
      */
-    void getLanguages();
+    List<Language> getLanguages();
 
     /**
      * Получить конкретный язык по идентификатору
      * @param ident - индентификатор языка
      */
-    void getLanguageByIdent(String ident);
+    Language getLanguageByIdent(java.lang.String ident);
 
     interface LanguageCallback extends _BaseCallback<Language>{}
     interface LanguageListCallback extends _BaseCallback<List<Language>>{}
@@ -43,7 +42,7 @@ public interface LanguageDAO {
 //         * Ошибка получения списка языков
 //         * @param errorMsg - текст ошибки
 //         */
-//        void onGetLangsError(String errorMsg);
+//        void onGetLangsError(Language errorMsg);
 //
 //        //Конкретный язык
 //        /**
@@ -56,7 +55,7 @@ public interface LanguageDAO {
 //         * Ошибка получения языка
 //         * @param errorMsg - текст ошибки
 //         */
-//        void onGetLangError(String errorMsg);
+//        void onGetLangError(Language errorMsg);
 //
 //
 //        //Операции БД
@@ -69,6 +68,6 @@ public interface LanguageDAO {
 //         * Ошибка синхронизации языков
 //         * @param errorMsg - текст ошибки
 //         */
-//        void onUpdateError(String errorMsg);
+//        void onUpdateError(Language errorMsg);
 //    }
 }

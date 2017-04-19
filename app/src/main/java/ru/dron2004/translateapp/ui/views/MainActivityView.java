@@ -6,11 +6,6 @@ import ru.dron2004.translateapp.ui._BaseView;
 public interface MainActivityView extends _BaseView {
 
     /**
-     * Запросить доступ в Интернет
-     */
-    void requestInternetPermission(PermissionCallback listner);
-
-    /**
      * Показать фрагмент переводчика
      */
     void showTranslateFragment();
@@ -23,13 +18,6 @@ public interface MainActivityView extends _BaseView {
     /**
      * Показать фрагмент Настроек
      */
-    void showSettingFragment();
+    void showAboutFragment();
 
-    interface PermissionCallback {
-        /**
-         * Вызывается в момент получения разрешения/запрещения использования интернета
-         * @param isGranted
-         */
-        void onRequestInternetPermission(boolean isGranted);
-    }
 }

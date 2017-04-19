@@ -33,7 +33,7 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:retrofit-converters:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     debugCompile 'junit:junit:4.12'
     debugCompile 'org.powermock:powermock-reflect:1.7.0RC4'
     debugCompile 'org.mockito:mockito-core:2.7.22'

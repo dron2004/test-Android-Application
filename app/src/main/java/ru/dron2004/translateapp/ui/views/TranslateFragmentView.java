@@ -1,7 +1,11 @@
 package ru.dron2004.translateapp.ui.views;
 
+import android.app.Activity;
+
 import java.util.List;
 
+import ru.dron2004.translateapp.model.Language;
+import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.ui._BaseView;
 
 public interface TranslateFragmentView extends _BaseView {
@@ -57,14 +61,18 @@ public interface TranslateFragmentView extends _BaseView {
      */
     void hideTipsList();
 
-
+    /**
+     * Отобразить направление перевода
+     * @param direction
+     */
+    void setTranslateDirection(TranslateDirection direction);
 
 
     //Кнопка добавления в избранное
     /**
      * Отобразить кнопку добавления в Избранное
      */
-    void showAddToFavoritesBtn();
+    void showAddToFavoritesBtn(boolean favorite);
 
     /**
      * Скрыть кнопку добавления в Избранное
@@ -82,4 +90,11 @@ public interface TranslateFragmentView extends _BaseView {
      */
     void hideTranslateBtn();
 
+
+    void setLanguagesList(List<Language> languagesList);
+
+    /**
+     * Get Fragment activity
+     */
+    Activity getActivity();
 }

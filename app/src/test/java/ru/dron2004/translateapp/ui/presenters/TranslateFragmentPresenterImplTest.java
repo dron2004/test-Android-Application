@@ -1,23 +1,29 @@
 package ru.dron2004.translateapp.ui.presenters;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.powermock.reflect.Whitebox;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.dron2004.translateapp.interactors.TranslationFragmentInteractor;
 import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.ui.views.TranslateFragmentView;
-import static org.mockito.Mockito.*;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class TranslateFragmentPresenterImplTest {
     TranslateFragmentView fakeView = mock(TranslateFragmentView.class);
     TranslationFragmentInteractor fakeInteractor = mock(TranslationFragmentInteractor.class);
+//    TranslationFragmentInteractor.TranslationInteractorCallback fakeInteractorCallBackOnTranslation = mock(TranslationFragmentInteractor.TranslationInteractorCallback.class);
+//    TranslationFragmentInteractor.TipsInteractorCallback fakeInteractorCallBackOnTips = mock(TranslationFragmentInteractor.TipsInteractorCallback.class);
     Translation fakeTranslation = mock(Translation.class);
     List<String> fakeTipsList = new ArrayList<>();
 
@@ -33,10 +39,7 @@ public class TranslateFragmentPresenterImplTest {
         presenter.setView(fakeView);
     }
 
-    @After
-    public void tearDown() throws Exception {
 
-    }
 
     @Test
     public void testThatTextToTranslateSendToInteractor() throws Exception {
@@ -51,6 +54,8 @@ public class TranslateFragmentPresenterImplTest {
     @Test
     public void testThatViewContainsLinkAfterSetView(){
         presenter.setView(fakeView);
+//        WeakReference<TranslateFragmentView> weakFakeView = new WeakReference<TranslateFragmentView>(fakeView);
+        Assert.assertEquals("Presenter has not instance view after setView",fakeView,((WeakReference)Whitebox.getInternalState(presenter,"view")).get());
         Assert.assertNotNull("Presenter contains NULL reference on VIEW after setView(View)",Whitebox.getField(presenter.getClass(),"view"));
     }
 
@@ -109,7 +114,7 @@ public class TranslateFragmentPresenterImplTest {
     @Test
     public void testCallbackTranslationComplete(){
         //По пришествии перевода
-        presenter.onTranslation(fakeTranslation);
+        presenter.onTranslateSuccess(fakeTranslation);
 
         //Убедиться что во View выставили текст перевода
         verify(fakeView,times(1)).setTranslatedText(fakeTranslation.translatedText);
@@ -120,7 +125,7 @@ public class TranslateFragmentPresenterImplTest {
     @Test
     public void testCallbackTipsCreated(){
         //По пришествии подсказок
-        presenter.onTipsCreated(fakeTipsList);
+        presenter.onTipsSuccess(fakeTipsList);
 
         //Убедиться что во View отправили сами подсказки
         verify(fakeView,times(1)).showTipsList(fakeTipsList);

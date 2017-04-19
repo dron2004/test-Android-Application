@@ -2,58 +2,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
+    android:padding="8dp"
     android:orientation="vertical"
     tools:context=".ui.views.TranslateFragment">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/spinnerFrom"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/exchangeTranslateDirection"
+            android:src="@drawable/ic_compare_arrows_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/spinnerTo"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         >
-        <MultiAutoCompleteTextView
+        <EditText
             android:text=""
             android:hint="@string/inputTextPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="flagNoExtractUi|actionDone"
             android:id="@+id/textToTranslate"/>
+        <Button
+            android:id="@+id/buttonTranslate"
+            android:gravity="center"
+            android:visibility="gone"
+            android:drawableBottom="@drawable/ic_translate_black_24dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/textToTranslate"
+            android:layout_alignBottom="@id/textToTranslate"
+            android:layout_alignRight="@id/textToTranslate"
+            />
         <ProgressBar
             android:id="@+id/inputTextProgress"
             android:visibility="gone"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminate="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-7dp"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_alignTop="@id/textToTranslate"
             android:layout_alignBottom="@id/textToTranslate"
+            android:layout_alignLeft="@id/textToTranslate"
             android:layout_alignRight="@id/textToTranslate"/>
     </RelativeLayout>
-    <Button
-        android:id="@+id/buttonTranslate"
-        android:text="@string/buttonTranslateTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone"
-        />
-    <TextView
-        android:id="@+id/translatedTextView"
-        android:gravity="center"
-        android:layout_gravity="center_vertical|center_horizontal"
+    <FrameLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/buttonAddToFavorites"
-        android:src="@drawable/ic_favorite_border_black_24dp"
-        app:fabSize="normal"
-        android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/translatedTextView"
+            android:gravity="center_horizontal|top"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <Button
+            android:id="@+id/buttonAddToFavorites"
+            android:drawableTop="@drawable/ic_favorite_border_gray_24dp"
+            android:visibility="gone"
+            android:text="@string/add_to_favorite_button"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textAllCaps="true"
+            android:id="@+id/yandexTranslateCopy"
+            android:layout_gravity="right|bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 </LinearLayout>

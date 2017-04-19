@@ -1,25 +1,17 @@
 package ru.dron2004.translateapp.ui.presenters;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import java.lang.ref.WeakReference;
 
-import ru.dron2004.translateapp.R;
 import ru.dron2004.translateapp.interactors.MainActivityInteractor;
-import ru.dron2004.translateapp.model.PackageModel;
-import ru.dron2004.translateapp.ui.presenters.MainActivityPresenter;
-import ru.dron2004.translateapp.ui.views.MainActivity;
 import ru.dron2004.translateapp.ui.views.MainActivityView;
 
-public class MainActivityPresenterImpl implements MainActivityPresenter, MainActivityView.PermissionCallback {
+public class MainActivityPresenterImpl implements MainActivityPresenter {
     private MainActivityInteractor interactor;
     private WeakReference<MainActivityView> view;
-    private PackageModel app;
 
-    public MainActivityPresenterImpl(PackageModel packageModel,MainActivityInteractor i){
-        app = packageModel;
+    public MainActivityPresenterImpl(MainActivityInteractor i){
         interactor = i;
+        interactor.registerCallback(this);
     }
 
     @Override
@@ -51,10 +43,7 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, MainAct
     @Override
     public void firstStart() {
         MainActivityView v = view.get();
-        if (v != null) {
-            v.requestInternetPermission(this);
-        }
-        interactor.checkAppConstantDB();
+        interactor.checkAPIServices();
     }
 
     @Override
@@ -74,20 +63,28 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, MainAct
     }
 
     @Override
-    public void showSettingFragment() {
+    public void showAboutFragment() {
         MainActivityView v = view.get();
         if (v != null) {
-            v.showSettingFragment();
+            v.showAboutFragment();
         }
     }
 
     @Override
-    public void onRequestInternetPermission(boolean isGranted) {
-        if (!isGranted) {
-            MainActivityView v = view.get();
-            if (v != null) {
-                v.showError(app.getString(R.string.internet_connection_required));
-            }
+    public void checkAPISuccess() {
+        //При успешной проверке и сихронизации БД Отображаем первый фрагмент (Переводчик)
+        MainActivityView v = view.get();
+        if (v != null) {
+            v.showTranslateFragment();
+        }
+
+    }
+
+    @Override
+    public void checkAPIError(String errorMsg) {
+        MainActivityView v = view.get();
+        if (v != null) {
+            v.showError(errorMsg);
         }
     }
 }

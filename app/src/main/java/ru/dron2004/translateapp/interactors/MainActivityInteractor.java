@@ -9,14 +9,14 @@ public interface MainActivityInteractor {
     void registerCallback(Callback callbackListner);
 
     /**
-     * Проверка актуальности базы поддерживаемых языков
+     * Проверка доступности интернета и работоспособности ключей API
      */
-    void checkAppConstantDB();
-
+    void checkAPIServices();
 
     // API обратного вызова
     interface Callback {
-
+        void checkAPISuccess();
+        void checkAPIError(String errorMsg);
     }
 
 }

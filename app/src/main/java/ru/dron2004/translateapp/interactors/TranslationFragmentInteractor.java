@@ -2,8 +2,9 @@ package ru.dron2004.translateapp.interactors;
 
 import java.util.List;
 
+import ru.dron2004.translateapp.model.Language;
+import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
-import ru.dron2004.translateapp.ui.presenters.TranslateFragmentPresenter;
 
 public interface TranslationFragmentInteractor {
 
@@ -31,21 +32,60 @@ public interface TranslationFragmentInteractor {
      */
     void getTipsForText(String text);
 
+    /**
+     * Возвращает направление перевода
+     * @return
+     */
+    TranslateDirection getTranslateDirection();
+
+    /**
+     * Переключить флаг избранного у перевода в истории
+     * @param translation
+     * @return
+     */
+    boolean toggleFavorite(Translation translation);
+
+    List<Language> getLanguages();
+
+    /**
+     * Поменять направление перевода toLanguage
+     * @param to
+     */
+    void changeTranslateDirectionTo(Language to);
+
+    /**
+     * Поменять направление перевода FromLanguage
+     * @param from
+     */
+    void changeTranslateDirectionFrom(Language from);
+
     //API обратного вызова
-    interface TranslationInteractorCallback extends _BaseCallback<Translation>{}
-    interface TipsInteractorCallback extends _BaseCallback<List<String>>{}
-    //TODO Убедиться что новое подходит и Убить старое
-//    interface Callback {
-//        /**
-//         * Перевод выполнен
-//         * @param translation
-//         */
-//        void onTranslation(Translation translation);
-//
-//        /**
-//         * Подсказки получены
-//         * @param tips
-//         */
-//        void onTipsCreated(List<String> tips);
-//    }
+    public interface TranslationInteractorCallback {
+        /**
+         * Обратный вызов в случае успешного выполнения
+         * @param response - Запрашиваемый объект
+         */
+        void onTranslateSuccess(Translation response);
+
+        /**
+         * Обратный вызов в случае ошибки
+         * @param errorMsg
+         */
+        void onError(String errorMsg);
+
+    }
+    public interface TipsInteractorCallback {
+        /**
+         * Обратный вызов в случае успешного выполнения
+         * @param response - Запрашиваемый объект
+         */
+        void onTipsSuccess(List<String> response);
+
+        /**
+         * Обратный вызов в случае ошибки
+         * @param errorMsg
+         */
+        void onError(String errorMsg);
+    }
+
 }

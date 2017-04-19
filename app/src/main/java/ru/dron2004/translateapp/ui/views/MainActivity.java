@@ -1,12 +1,8 @@
 package ru.dron2004.translateapp.ui.views;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,13 +10,16 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import ru.dron2004.translateapp.R;
-import ru.dron2004.translateapp.model.PackageModel;
-import ru.dron2004.translateapp.ui.presenters.*;
-import ru.dron2004.translateapp.interactors.*;
+import ru.dron2004.translateapp.interactors.MainActivityInteractorImpl;
+import ru.dron2004.translateapp.ui.presenters.MainActivityPresenter;
+import ru.dron2004.translateapp.ui.presenters.MainActivityPresenterImpl;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
 
-    private static final int REQUEST_INTERNET_PERMISSION = 23022;
+    private static final String TRANSLATE_FRAGMENT = "Translate Fragment";
+    private static final String HISTORY_FRAGMENT = "History Fragment";
+    private static final String SETTING_FRAGMENT = "Setting Fragment";
+    private BottomNavigationView navigation;
     private MainActivityPresenter presenter;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -35,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 case R.id.navigation_favorite:
                     presenter.showFavoritesFragment();
                     return true;
-                case R.id.navigation_setting:
-                    presenter.showSettingFragment();
+                case R.id.navigation_about:
+                    presenter.showAboutFragment();
                     return true;
             }
             return false;
@@ -49,11 +48,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        presenter = new MainActivityPresenterImpl(new PackageModel(getApplicationContext()),new MainActivityInteractorImpl(new PackageModel(getApplicationContext())));
+        presenter = new MainActivityPresenterImpl(new MainActivityInteractorImpl(presenter));
+
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         presenter.setView(this);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        presenter.onStart();
+
+        if (savedInstanceState == null){
+            presenter.firstStart();
+        }
         Log.d("happy","Activity onCreate");
 
     }
@@ -62,48 +68,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onStart();
-
-        presenter.firstStart();
-    }
-
-    private PermissionCallback permissionCallback;
-
-    /**
-     * Проверка разрешения доступа к сети
-     * а оно оказывается не опастное - привет Google!
-     * @param listner
-     */
-    @Override
-    public void requestInternetPermission(PermissionCallback listner) {
-        Log.d("happy","In Activity");
-        this.permissionCallback = listner;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("happy","Permission Not Granted");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Log.d("happy","SDK >= M");
-                requestPermissions(
-                        new String[]{
-                                Manifest.permission.INTERNET
-                        } ,
-                        REQUEST_INTERNET_PERMISSION
-                );
-            } else {
-                Log.d("happy","SDK < M");
-            }
-        } else {
-            listner.onRequestInternetPermission(true);
-        }
-    }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == REQUEST_INTERNET_PERMISSION && permissions[0].equals(Manifest.permission.INTERNET) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            permissionCallback.onRequestInternetPermission(true);
-        } else {
-            permissionCallback.onRequestInternetPermission(false);
-        }
     }
 
 
@@ -111,25 +77,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     public void showTranslateFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.placeForFragment, TranslateFragment.newInstance());
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.placeForFragment, new TranslateFragment());
+        transaction.addToBackStack(TRANSLATE_FRAGMENT);
         transaction.commit();
+//        navigation.setSelectedItemId(R.id.navigation_translate);
     }
 
     @Override
     public void showFavoritesFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.placeForFragment, FavoriteFragment.newInstance("",""));
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.placeForFragment, new FavoriteFragment());
+        transaction.addToBackStack(HISTORY_FRAGMENT);
         transaction.commit();
+//        navigation.setSelectedItemId(R.id.navigation_favorite);
     }
 
     @Override
-    public void showSettingFragment() {
+    public void showAboutFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.placeForFragment, new SettingFragment());
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.placeForFragment, new AboutFragment());
+        transaction.addToBackStack(SETTING_FRAGMENT);
         transaction.commit();
+//        navigation.setSelectedItemId(R.id.navigation_setting);
     }
 
     @Override

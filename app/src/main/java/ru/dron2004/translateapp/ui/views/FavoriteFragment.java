@@ -1,107 +1,145 @@
 package ru.dron2004.translateapp.ui.views;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import ru.dron2004.translateapp.R;
+import ru.dron2004.translateapp.interactors.FavoriteFragmentInteactorImpl;
+import ru.dron2004.translateapp.model.Translation;
+import ru.dron2004.translateapp.ui._BaseFragment;
+import ru.dron2004.translateapp.ui.presenters.FavoriteFragmentPresenter;
+import ru.dron2004.translateapp.ui.presenters.FavoriteFragmentPresenterImpl;
+import ru.dron2004.translateapp.ui.presenters.PresenterFactory;
+import ru.dron2004.translateapp.ui.view_adapters.HistoryAdapter;
+import ru.dron2004.translateapp.utility.LocaleUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * Use the {@link FavoriteFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FavoriteFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class FavoriteFragment
+        extends _BaseFragment<FavoriteFragmentPresenter>
+        implements FavoriteFragmentView {
 
-//    private OnFragmentInteractionListener mListener;
+    private RecyclerView historyView;
+    private HistoryAdapter adapter;
+    private TextView historyEmptyView;
 
-    public FavoriteFragment() {
-        // Required empty public constructor
+    public FavoriteFragment(){
+        //Устанавливаем собиратель презентера
+        setPresenterFactory(new PresenterFactory<FavoriteFragmentPresenter>() {
+            @NonNull
+            @Override
+            public FavoriteFragmentPresenter createPresenter() {
+                return new FavoriteFragmentPresenterImpl(new FavoriteFragmentInteactorImpl());
+            }
+        });
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoriteFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoriteFragment newInstance(String param1, String param2) {
+
+
+    public static FavoriteFragment newInstance() {
         FavoriteFragment fragment = new FavoriteFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_favorite, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (getActivity() != null) {
+            historyEmptyView = (TextView) getActivity().findViewById(R.id.historyEmptyView);
+            historyView = (RecyclerView) getActivity().findViewById(R.id.historyView);
+            historyView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+            historyView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+
+            HistoryTouchCallback callback = new HistoryTouchCallback();
+            ItemTouchHelper helper = new ItemTouchHelper(callback);
+            helper.attachToRecyclerView(historyView);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
-    }
+    public void onResume() {
+        super.onResume();
+        //Уйти за историей в БД
+        getPresenter().onStart();
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+    public void showError(String message) {
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
+    public void setHistory(List<Translation> translationList) {
+        historyEmptyView.setVisibility(View.GONE);
+        historyView.setVisibility(View.VISIBLE);
+        adapter = new HistoryAdapter(translationList,getPresenter());
+        historyView.setAdapter(adapter);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+
+    @Override
+    public void showTranslateFragment(Translation translation) {
+        if (getActivity() != null){
+            ((MainActivityView)getActivity()).showTranslateFragment();
+        }
+    }
+
+    @Override
+    public void setEmptyHistory() {
+        historyEmptyView.setVisibility(View.VISIBLE);
+        historyView.setVisibility(View.GONE);
+        historyEmptyView.setText(LocaleUtils.getLocaleStringResource(R.string.no_history_elements));
+    }
+
+    private class HistoryTouchCallback extends ItemTouchHelper.SimpleCallback {
+
+        public HistoryTouchCallback() {
+            super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            HistoryAdapter.ViewHolder myHolder = (HistoryAdapter.ViewHolder) viewHolder;
+
+            switch (direction){
+                case ItemTouchHelper.LEFT:
+                    adapter.itemRemove(viewHolder.getAdapterPosition());
+                    getPresenter().historyItemSwipeLeft(myHolder.getTranslation());
+                    break;
+                case ItemTouchHelper.RIGHT:
+                    adapter.itemRemove(viewHolder.getAdapterPosition());
+                    getPresenter().historyItemSwipeRight(myHolder.getTranslation());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

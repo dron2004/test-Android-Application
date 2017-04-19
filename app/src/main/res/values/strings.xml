@@ -1,13 +1,9 @@
 <resources>
-    <string name="app_name">TranslateApp</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">Example TranslateApp</string>
     <string name="title_setting">Setting</string>
     <string name="title_favorite">Favorite</string>
     <string name="title_translate">Translate</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="inputTextPlaceHolder">Input text to translate here</string>
     <string name="buttonTranslateTitle">Translate</string>
@@ -19,4 +15,30 @@
     <string name="dialog_title_fromLangPreference">Select Your Language</string>
     <string name="dialog_title_toLangPreference">Select Language for translation</string>
     <string name="title_app_section">Application Setting</string>
+    <string name="no_internet_connection">Your device doesn\'t have internet connection. Check the device setting.</string>
+    <string name="no_internet_permission">This application need Internet permission to get Translation.</string>
+    <string name="predictor_apikey_blocked">Yandex Predictor API Key is blocked</string>
+    <string name="predictor_apikey_notvalid">Yandex Predictor API Key is NOT valid</string>
+    <string name="predictor_unknown_error">Yandex Predictor Unknown Error</string>
+    <string name="predictor_apikey_daily_exceeded">Yandex Predictor Daily Exceeded</string>
+    <string name="predictor_apikey_text_to_long_error">Your Text More than 1000 chars</string>
+    <string name="predictor_apikey_unsupported_language">Unsupported Language For Yandex Predictor</string>
+    <string name="predictor_api_changeFormat">Yandex Predictor change responce format. Update application.</string>
+    <string name="traslate_api_changeFormat">Yandex Translate change format. Update application.</string>
+    <string name="translate_apikey_notvalid">Yandex Translate API Key not valid</string>
+    <string name="translate_apikey_blocked">Yandex Translate API key has blocked</string>
+    <string name="translate_apikey_daily_exceeded">Yandex Translate API key daily exceeded</string>
+    <string name="translate_apikey_text_to_long_error">Your text to translate more that 1000 chars</string>
+    <string name="translate_apikey_textnot_translable">Your text can not be translate</string>
+    <string name="translate_apikey_unsupported_language">Yandex Translate not support this language</string>
+    <string name="translate_unknown_error">Yandex Translate Unknown Error</string>
+    <string name="add_to_favorite_button">Add to Favorite</string>
+    <string name="remove_from_favorite_button">Remove From Favorites</string>
+    <string name="no_history_elements">The are no history Translations. Start Translation.</string>
+    <string name="yandex_translate_copy">Translate via Yandex Translator API</string>
+    <string name="title_about">About App</string>
+    <string name="text_title_aboutApp">Test Application for School mobile development for Android.</string>
+    <string name="text_title_aboutAuthor">Author: dron2004\n Date: 2017/04/23</string>
+    <string name="text_title_aboutCopyTR">Translated by service «Yandex.Translator»</string>
+    <string name="text_title_aboutCopyPD">Implemented by the service «Yandex.Predictor»</string>
 </resources>

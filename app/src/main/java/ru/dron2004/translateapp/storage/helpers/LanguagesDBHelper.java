@@ -10,7 +10,7 @@ import android.util.Log;
  * создается с учетом локали устройства
  * пополняется накопительно
  */
-public class LanguagesTitleDBHelper extends SQLiteOpenHelper {
+public class LanguagesDBHelper extends SQLiteOpenHelper {
     private static final int version = 1;
     private static String dbFileName="languageTitles_%%%UI%%%.sql";
 
@@ -21,7 +21,7 @@ public class LanguagesTitleDBHelper extends SQLiteOpenHelper {
     public static final String _TITLES = "_titles";
 
 
-    public LanguagesTitleDBHelper(Context context, String uiLang) {
+    public LanguagesDBHelper(Context context, String uiLang) {
         //Создаем базу данных констант к конкретному UI
         super(context, dbFileName.replace("%%%UI%%%",uiLang), null, version);
         userLanguage = uiLang;
