@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:id="@+id/iconFavorite"
+            android:src="@drawable/ic_favorite_border_gray_24dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+        <TextView
+            android:layout_weight="1"
+            android:text="Ребенок"
+            android:textColor="#000000"
+            android:textAllCaps="true"
+            android:gravity="center_vertical|left"
+            android:id="@+id/textSrc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:text="child"
+            android:textAllCaps="true"
+            android:id="@+id/textDst"
+            android:gravity="center_vertical|left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_gravity="right|top"
+        android:text="ru-en"
+        android:id="@+id/translateDirection"
+        android:textAllCaps="true"
+        android:gravity="center"
+        android:layout_marginRight="8dp"
+        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>

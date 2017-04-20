@@ -39,7 +39,6 @@ import ru.dron2004.translateapp.ui.presenters.TranslateFragmentPresenterImpl;
 import ru.dron2004.translateapp.ui.view_adapters.TipsAdapter;
 import ru.dron2004.translateapp.utility.KeyBoardUtils;
 import ru.dron2004.translateapp.utility.LocaleUtils;
-import ru.dron2004.translateapp.utility.WidgetUtils;
 
 public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter> implements TranslateFragmentView {
     private EditText textToTranslate;
@@ -188,9 +187,9 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
         translatedTextView.setText(text.trim());
 
         //TODO Использовать увеличение только в случае одного слова
-        float minTextSizePx = getResources().getDimensionPixelSize(R.dimen.max_text_size);
-        float maxTextWidthPx = getResources().getDimensionPixelSize(R.dimen.max_text_width);
-        WidgetUtils.fitText(translatedTextView, text.trim(), minTextSizePx, maxTextWidthPx);
+//        float maxTextSizePx = getResources().getDimensionPixelSize(R.dimen.max_text_size);
+//        float maxTextWidthPx = getResources().getDimensionPixelSize(R.dimen.max_text_width);
+//        WidgetUtils.fitText(translatedTextView, text.trim(), maxTextSizePx, maxTextWidthPx);
     }
 
     @Override
@@ -347,10 +346,10 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     public void setLanguagesList(List<Language> languagesList) {
         Language[] languages = languagesList.toArray(new Language[languagesList.size()]);
         this.languagesList = languagesList;
-        ArrayAdapter spinnerAdapterFrom = new ArrayAdapter<Language>(getActivity(), android.R.layout.simple_spinner_item, languages);
+        ArrayAdapter spinnerAdapterFrom = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, languages);
         spinnerAdapterFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrom.setAdapter(spinnerAdapterFrom);
-        ArrayAdapter spinnerAdapterTo = new ArrayAdapter<Language>(getActivity(), android.R.layout.simple_spinner_item, languages);
+        ArrayAdapter spinnerAdapterTo = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, languages);
         spinnerAdapterTo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTo.setAdapter(spinnerAdapterTo);
     }

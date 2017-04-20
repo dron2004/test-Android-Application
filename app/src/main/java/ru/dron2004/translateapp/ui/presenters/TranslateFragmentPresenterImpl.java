@@ -1,7 +1,5 @@
 package ru.dron2004.translateapp.ui.presenters;
 
-import android.util.Log;
-
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -44,8 +42,6 @@ public class TranslateFragmentPresenterImpl
             //Восстановим список языков
             v.setLanguagesList(interactor.getLanguages());
 
-            v.setTranslateDirection(interactor.getTranslateDirection());
-
             //Если есть полученный перевод
             if (currentTranslation != null) {
                 //Выставляем текст для перевода
@@ -58,6 +54,7 @@ public class TranslateFragmentPresenterImpl
                 v.showAddToFavoritesBtn(currentTranslation.isFavorite());
             } else {
             //Если нет полученного перевода - перевернули в процессе
+                v.setTranslateDirection(interactor.getTranslateDirection());
                 //Если был введен текст,
                 // показать кнопку перевести
                 if (v.getTextToTranslate().isEmpty()) {
@@ -81,13 +78,12 @@ public class TranslateFragmentPresenterImpl
 
     @Override
     public void onPause() {
-        Log.d("happy","Fragment ON PAUSE");
-        //Зануляем view
         TranslateFragmentView v = view.get();
         if (v != null) {
             //Опустошаем список подсказок
             v.hideTipsList();
         }
+        //Зануляем view
         if(view != null) view = null;
     }
 

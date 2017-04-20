@@ -3,7 +3,6 @@ package ru.dron2004.translateapp.utility;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
 
@@ -21,6 +20,9 @@ public class WidgetUtils {
 //            Log.d("happy","TextSize:"+size);
 //            Log.d("happy","MaxTextSize:"+maxTextSizePx);
 //            Log.d("happy","LineCount:"+textView.getLineCount());
+            if (bounds.height() > textView.getHeight()+15){
+                break;
+            }
             if(bounds.width() > maxWidthPx){
                 break;
             }

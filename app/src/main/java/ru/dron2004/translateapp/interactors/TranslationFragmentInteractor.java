@@ -60,7 +60,7 @@ public interface TranslationFragmentInteractor {
     void changeTranslateDirectionFrom(Language from);
 
     //API обратного вызова
-    public interface TranslationInteractorCallback {
+    interface TranslationInteractorCallback {
         /**
          * Обратный вызов в случае успешного выполнения
          * @param response - Запрашиваемый объект
@@ -74,7 +74,7 @@ public interface TranslationFragmentInteractor {
         void onError(String errorMsg);
 
     }
-    public interface TipsInteractorCallback {
+    interface TipsInteractorCallback {
         /**
          * Обратный вызов в случае успешного выполнения
          * @param response - Запрашиваемый объект

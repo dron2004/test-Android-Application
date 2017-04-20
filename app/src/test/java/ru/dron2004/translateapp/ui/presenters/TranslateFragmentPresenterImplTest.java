@@ -1,5 +1,7 @@
 package ru.dron2004.translateapp.ui.presenters;
 
+import android.app.Activity;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.dron2004.translateapp.interactors.TranslationFragmentInteractor;
+import ru.dron2004.translateapp.model.Language;
+import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.ui.views.TranslateFragmentView;
 
@@ -25,7 +29,10 @@ public class TranslateFragmentPresenterImplTest {
 //    TranslationFragmentInteractor.TranslationInteractorCallback fakeInteractorCallBackOnTranslation = mock(TranslationFragmentInteractor.TranslationInteractorCallback.class);
 //    TranslationFragmentInteractor.TipsInteractorCallback fakeInteractorCallBackOnTips = mock(TranslationFragmentInteractor.TipsInteractorCallback.class);
     Translation fakeTranslation = mock(Translation.class);
+    TranslateDirection fakeTranslateDirection = mock(TranslateDirection.class);
+    Language fakeLanguage = mock(Language.class);
     List<String> fakeTipsList = new ArrayList<>();
+    List<Language> fakeLanguageList = new ArrayList<>();
 
     TranslateFragmentPresenterImpl presenter;
 
@@ -72,25 +79,88 @@ public class TranslateFragmentPresenterImplTest {
     }
 
     @Test
-    public void testInitializeViewFirstStart() {
-        //При старте приложения текст для перевода отсутствует
-        when(fakeView.getTextToTranslate()).thenReturn(emptyString);
-        when(fakeView.getTranslatedText()).thenReturn(emptyString);
+    public void testInitializeViewFirstStart_not_emptyCurrentTranslation() {
+        //При сохраненном переводе
+        // - смена ориентации
+        // - восстановиление из загашника
+        Whitebox.setInternalState(presenter,"currentTranslation",fakeTranslation);
         presenter.onStart();
-        //Убедиться что кнопки Перевести и Добавить в избранное скрываются
-        verify(fakeView).hideTranslateBtn();
-        verify(fakeView).hideAddToFavoritesBtn();
+
+        //Получем список языков из Интерактора - отдаем во фрагмент
+        when(fakeInteractor.getLanguages()).thenReturn(fakeLanguageList);
+
+        verify(fakeInteractor,times(1)).getLanguages();
+        verify(fakeView,times(1)).setLanguagesList(fakeLanguageList);
+
+        //При не пустом хранящемся переводе
+        verify(fakeView,times(1)).setTranslateDirection(fakeTranslation.translateDirection);
+        verify(fakeView,times(1)).setTranslatedText(fakeTranslation.textToTranslate);
+        verify(fakeView,times(1)).showAddToFavoritesBtn(fakeTranslation.isFavorite());
+
+    }
+
+
+    @Test
+    public void testInitializeViewFirstStart_emptyCurrentTranslation_text_toTranslate_notEmpty() {
+        //При недоделанном переводе
+        // - смена ориентации
+        // - восстановиление из загашника
+        when(fakeView.getTextToTranslate()).thenReturn(testText);
+        //Передаем направление перевода во Фрагмент
+        when(fakeInteractor.getTranslateDirection()).thenReturn(fakeTranslateDirection);
+        //Получем список языков из Интерактора - отдаем во фрагмент
+        when(fakeInteractor.getLanguages()).thenReturn(fakeLanguageList);
+        presenter.onStart();
+
+
+
+        verify(fakeInteractor,times(1)).getLanguages();
+        verify(fakeView,times(1)).setLanguagesList(fakeLanguageList);
+
+
+
+        verify(fakeInteractor,times(1)).getTranslateDirection();
+        verify(fakeView,times(1)).setTranslateDirection(fakeTranslateDirection);
+
+
+        //При пустом хранящемся переводе
+        //Анализируем введенный для перевода текст
+//        when(fakeView.getTranslatedText()).thenReturn(testText);
+
+        verify(fakeView,times(1)).showTranslateBtn();
+    }
+
+    @Test
+    public void testInitializeViewFirstStart_emptyCurrentTranslation_text_toTranslate_Empty() {
+        //При недоделанном переводе
+        // - смена ориентации
+        // - восстановиление из загашника
+        //Получем список языков из Интерактора - отдаем во фрагмент
+        when(fakeInteractor.getLanguages()).thenReturn(fakeLanguageList);
+        //Из View возвращаем пустую строку для перевода
+        when(fakeView.getTextToTranslate()).thenReturn(emptyString);
+        //Передаем направление перевода во Фрагмент
+        when(fakeInteractor.getTranslateDirection()).thenReturn(fakeTranslateDirection);
+        presenter.onStart();
+
+
+        verify(fakeInteractor,times(1)).getLanguages();
+        verify(fakeView,times(1)).setLanguagesList(fakeLanguageList);
+        verify(fakeInteractor,times(1)).getTranslateDirection();
+        //При пустом хранящемся переводе
+        //Анализируем введенный для перевода текст
+        verify(fakeView,times(1)).hideTranslateBtn();
     }
 
     @Test
     public void testInitializeViewReCreate_No_Translation_completed() {
-        //При перезапуске фрагмента текст для перевода присутствет а переведенный отсутствует
-        when(fakeView.getTextToTranslate()).thenReturn(testText);
-        when(fakeView.getTranslatedText()).thenReturn(emptyString);
-        presenter.onStart();
-        //Убедиться что кнопки Перевести и Добавить в избранное скрываются
-        verify(fakeView,times(1)).showTranslateBtn();
-        verify(fakeView,times(1)).hideAddToFavoritesBtn();
+//        //При перезапуске фрагмента текст для перевода присутствет а переведенный отсутствует
+//        when(fakeView.getTextToTranslate()).thenReturn(testText);
+//        when(fakeView.getTranslatedText()).thenReturn(emptyString);
+//        presenter.onStart();
+//        //Убедиться что кнопки Перевести и Добавить в избранное скрываются
+//        verify(fakeView,times(1)).showTranslateBtn();
+//        verify(fakeView,times(1)).hideAddToFavoritesBtn();
     }
 
     @Test
@@ -100,8 +170,8 @@ public class TranslateFragmentPresenterImplTest {
         when(fakeView.getTranslatedText()).thenReturn(testText);
         presenter.onStart();
         //Убедиться что кнопки Перевести и Добавить в избранное скрываются
-        verify(fakeView,times(1)).showTranslateBtn();
-        verify(fakeView,times(1)).showAddToFavoritesBtn();
+//        verify(fakeView,times(1)).showTranslateBtn();
+//        verify(fakeView,times(1)).showAddToFavoritesBtn(false);
     }
 
     @Test
@@ -119,15 +189,53 @@ public class TranslateFragmentPresenterImplTest {
         //Убедиться что во View выставили текст перевода
         verify(fakeView,times(1)).setTranslatedText(fakeTranslation.translatedText);
         //Показали кнопку добавить в избранное
-        verify(fakeView,times(1)).showAddToFavoritesBtn();
+//        verify(fakeView,times(1)).showAddToFavoritesBtn();
     }
 
     @Test
     public void testCallbackTipsCreated(){
+        Activity fakeActivity = mock(Activity.class);
+        when(fakeView.getActivity()).thenReturn(fakeActivity);
         //По пришествии подсказок
         presenter.onTipsSuccess(fakeTipsList);
 
+        verify(fakeView,times(1)).getActivity();
         //Убедиться что во View отправили сами подсказки
-        verify(fakeView,times(1)).showTipsList(fakeTipsList);
+//        verify(fakeView,times(1)).showTipsList(fakeTipsList);
+    }
+
+    @Test
+    public void onPause() {
+        presenter.setView(fakeView);
+        presenter.onPause();
+        Assert.assertNull(Whitebox.getInternalState(presenter,"view"));
+        verify(fakeView,times(1)).hideTipsList();
+    }
+
+    @Test
+    public void selectedFrom() {
+        presenter.selectedFrom(fakeLanguage);
+        verify(fakeInteractor,times(1)).changeTranslateDirectionFrom(fakeLanguage);
+    }
+
+    @Test
+    public void selectedTo() {
+        presenter.selectedTo(fakeLanguage);
+        verify(fakeInteractor,times(1)).changeTranslateDirectionTo(fakeLanguage);
+    }
+
+    @Test
+    public void toggleFavorite() {
+        Whitebox.setInternalState(presenter,"currentTranslation",fakeTranslation);
+
+        presenter.toggleFavorite();
+        verify(fakeInteractor,times(1)).toggleFavorite(fakeTranslation);
+
+    }
+
+    @Test
+    public void onError(){
+        presenter.onError(testText);
+        verify(fakeView,times(1)).showError(testText);
     }
 }

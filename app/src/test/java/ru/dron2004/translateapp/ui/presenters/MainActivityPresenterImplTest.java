@@ -15,6 +15,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class MainActivityPresenterImplTest {
+    String errorMsg = "just simple error string";
     MainActivityView fakeView = mock(MainActivityView.class);
     MainActivityInteractor fakeInteractor = mock(MainActivityInteractor.class);
 
@@ -38,21 +39,29 @@ public class MainActivityPresenterImplTest {
 
     @Test
     public void unsetView() throws Exception {
-        //TODO Разобраться
-//        presenter.unsetView();
-//        Assert.assertNull(Whitebox.getField(presenter.getClass(),"view"));
+        presenter.unsetView();
+        Assert.assertNull(Whitebox.getInternalState(presenter,"view"));
     }
 
     @Test
     public void onStart() throws Exception {
-
+        presenter.onStart();
+        //Убедиться что в презентере в момент старта уже сохраненена ссылка на View
+        Assert.assertNotNull(Whitebox.getField(presenter.getClass(),"view"));
     }
 
     @Test
     public void onPause() throws Exception {
         //TODO Разобраться
-//        presenter.onPause();
-//        Assert.assertNull(Whitebox.getField(presenter.getClass(),"view"));
+        presenter.onPause();
+        Assert.assertNull(Whitebox.getInternalState(presenter,"view"));
+    }
+
+    @Test
+    public void firstStart(){
+        presenter.firstStart();
+//        убедиться что вызов уходит в интерактор для проверки настроек
+        verify(fakeInteractor,times(1)).checkAPIServices();
     }
 
     @Test
@@ -71,6 +80,19 @@ public class MainActivityPresenterImplTest {
     public void showSettingFragment() throws Exception {
         presenter.showAboutFragment();
         verify(fakeView,times(1)).showAboutFragment();
+    }
+
+    @Test
+    public void checkAPISuccess() {
+        //При успешной проверке и сихронизации БД Отображаем первый фрагмент (Переводчик)
+        presenter.checkAPISuccess();
+        verify(fakeView,times(1)).showTranslateFragment();
+    }
+
+    @Test
+    public void checkAPIError() {
+        presenter.checkAPIError(errorMsg);
+        verify(fakeView,times(1)).showError(errorMsg);
     }
 
 }
