@@ -19,6 +19,8 @@ public class CheckApiOnlineImpl implements CheckApiOnline, YandexPredictorCallba
 
     public CheckApiOnlineImpl(CheckApiOnline.Callback callback){
         listner = callback;
+        predictorHelper = new YandexPredictorHelper(this);
+        translateHelper = new YandexTranslateHelper(this, LocaleUtils.getLocale());
     }
 
     @Override
@@ -36,7 +38,6 @@ public class CheckApiOnlineImpl implements CheckApiOnline, YandexPredictorCallba
 
     @Override
     public void checkAPIKeys() {
-        predictorHelper = new YandexPredictorHelper(this);
         predictorHelper.getSupportLanguages();
     }
 
@@ -47,7 +48,6 @@ public class CheckApiOnlineImpl implements CheckApiOnline, YandexPredictorCallba
     public void onPredictorSupportLanguagesSuccess(List<Language> supportLanguagesIdents) {
         //Если языки получены то API предиктора работает
         //Если предиктор работает - проверим переводчик
-        translateHelper = new YandexTranslateHelper(this, LocaleUtils.getLocale());
         translateHelper.getLanguageTitles(LocaleUtils.getLocale());
     }
 

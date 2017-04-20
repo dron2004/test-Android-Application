@@ -4,7 +4,9 @@ package ru.dron2004.translateapp.interactors;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.dron2004.translateapp.app.MainApplication;
 import ru.dron2004.translateapp.model.Language;
+import ru.dron2004.translateapp.model.PackageModel;
 import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.storage.api.YandexPredictorCallback;
@@ -38,7 +40,7 @@ public class TranslationFragmentInteractorImpl
     private LanguageDAO languageDAO;
     private TranslationDAO translationDAO;
     private TipsDAO tipsDAO;
-    private SettingDAO settingDAO;
+//    private SettingDAO settingDAO;
 
     private Thread tipsThread;
 
@@ -46,31 +48,42 @@ public class TranslationFragmentInteractorImpl
     private List<Language> languagesList;
     private Translation currentTranslation;
 
+    private PackageModel app;
+
 
     public TranslationFragmentInteractorImpl(
             TranslationInteractorCallback translationCallback,
             TipsInteractorCallback tipsCallBack)
     {
+        this(translationCallback,tipsCallBack,new PackageModel(MainApplication.getAppContext()));
+    }
+
+    public TranslationFragmentInteractorImpl(
+            TranslationInteractorCallback translationCallback,
+            TipsInteractorCallback tipsCallBack,
+            PackageModel packageModel)
+    {
         registerTranslationCallback(translationCallback);
         registerTipsCallback(tipsCallBack);
+        app = packageModel;
 
         translationDAO = new TranslationDAOImpl(this,null);
         tipsDAO = new TipsDAOImpl(this);
         languageDAO = new LanguageDAOImpl();
-        settingDAO = new SettingDAOImpl();
+//        settingDAO = getSettingDAO();
 
 //        translateHelper = new YandexTranslateHelper(this, LocaleUtils.getLocale());
 //        predictorHelper = new YandexPredictorHelper();
-
         //Иницализируем направление перевода из настроек
         translateDirection = new TranslateDirection(
-                languageDAO.getLanguageByIdent(settingDAO.getFromLanguageIdent()),
-                languageDAO.getLanguageByIdent(settingDAO.getToLanguageIdent())
+                languageDAO.getLanguageByIdent(getSettingDAO().getFromLanguageIdent()),
+                languageDAO.getLanguageByIdent(getSettingDAO().getToLanguageIdent())
         );
-
     }
 
-
+    public SettingDAO getSettingDAO() {
+        return new SettingDAOImpl(app.getAppContext());
+    }
 
     @Override
     public void registerTranslationCallback(TranslationInteractorCallback callbackListner) {
@@ -81,9 +94,6 @@ public class TranslationFragmentInteractorImpl
     public void registerTipsCallback(TipsInteractorCallback callbackListner) {
         tipsCallBack = callbackListner;
     }
-
-
-
 
 
     @Override
@@ -107,13 +117,13 @@ public class TranslationFragmentInteractorImpl
     @Override
     public void changeTranslateDirectionTo(Language to) {
         translateDirection.to = to;
-        settingDAO.setToLanguage(to);
+        getSettingDAO().setToLanguage(to);
     }
 
     @Override
     public void changeTranslateDirectionFrom(Language from) {
         translateDirection.from = from;
-        settingDAO.setFromLanguage(from);
+        getSettingDAO().setFromLanguage(from);
     }
 
     //ПОЛУЧЕНИЕ ПЕРЕВОДА
@@ -149,18 +159,16 @@ public class TranslationFragmentInteractorImpl
     private long timeLastTextTyped;
     @Override
     public void getTipsForText(final String text) {
-        //TODO Сделать задержку перед запросом (MB Thread.sleep)
             //Так как в базе подсказок храняться только слова
             // - отправлять запрос с базу только не содержащий пробелов
             // - остальное отправлять в API Predictor
-
             //При следующем вводе прерываем подбор значений
             if (tipsThread != null && tipsThread.isAlive()) tipsThread.interrupt();
 
             tipsThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Language from = languageDAO.getLanguageByIdent(settingDAO.getFromLanguageIdent());
+                    Language from = languageDAO.getLanguageByIdent(getSettingDAO().getFromLanguageIdent());
                     try {
                         //Ждем паузу - вдруг продолжит печатать
                         Thread.sleep(DELAY_BEFORE_TIPS_MILLIS);

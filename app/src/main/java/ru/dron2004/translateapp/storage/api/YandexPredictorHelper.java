@@ -36,7 +36,6 @@ public class YandexPredictorHelper {
 
 
     public void getSupportLanguages(){
-        Log.d("happy","Try to get support languages from Predictor");
         api.getSupportedLanguages(apiKey).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

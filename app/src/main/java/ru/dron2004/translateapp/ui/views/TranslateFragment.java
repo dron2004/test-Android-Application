@@ -152,8 +152,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 @Override public void afterTextChanged(Editable s) {}
             });
 
-        } else {
-            //TODO Активность почему то не подцепилась к фрагменту - ???
         }
 
     }
@@ -185,11 +183,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     public void setTranslatedText(String text) {
         yandexTranslateCopy.setText(LocaleUtils.getLocaleStringResource(R.string.yandex_translate_copy));
         translatedTextView.setText(text.trim());
-
-        //TODO Использовать увеличение только в случае одного слова
-//        float maxTextSizePx = getResources().getDimensionPixelSize(R.dimen.max_text_size);
-//        float maxTextWidthPx = getResources().getDimensionPixelSize(R.dimen.max_text_width);
-//        WidgetUtils.fitText(translatedTextView, text.trim(), maxTextSizePx, maxTextWidthPx);
     }
 
     @Override

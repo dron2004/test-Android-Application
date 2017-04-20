@@ -11,19 +11,17 @@ import ru.dron2004.translateapp.storage.api.YandexTranslateCallback;
 import ru.dron2004.translateapp.storage.api.YandexTranslateHelper;
 import ru.dron2004.translateapp.storage.dao.LanguageDAO;
 import ru.dron2004.translateapp.storage.dao.LanguageDAOImpl;
-import ru.dron2004.translateapp.storage.dao.SettingDAO;
-import ru.dron2004.translateapp.storage.dao.SettingDAOImpl;
-import ru.dron2004.translateapp.storage.dao.TipsDAO;
-import ru.dron2004.translateapp.storage.dao.TranslationDAO;
 import ru.dron2004.translateapp.utility.LocaleUtils;
 
-public class SyncDBonStartImpl implements SyncDBonStart,YandexPredictorCallback, YandexTranslateCallback,LanguageDAO.UpdateLanguagesCallback {
+public class SyncDBonStartImpl
+        implements SyncDBonStart,
+                    YandexPredictorCallback,
+                    YandexTranslateCallback,
+                    LanguageDAO.UpdateLanguagesCallback {
+
     private SyncDBonStart.Callback listner;
     //Ссылки на Хранилища
     private LanguageDAO languageDAO;
-    private TranslationDAO translationDAO;
-    private TipsDAO tipsDAO;
-    private SettingDAO settingDAO;
 
     //Ссылки на API
     private YandexTranslateHelper translateHelper;
@@ -38,7 +36,6 @@ public class SyncDBonStartImpl implements SyncDBonStart,YandexPredictorCallback,
         listner = callback;
 
         languageDAO = new LanguageDAOImpl(this);
-        settingDAO = new SettingDAOImpl();
 
         translateHelper = new YandexTranslateHelper(this, LocaleUtils.getLocale());
         predictorHelper = new YandexPredictorHelper(this);

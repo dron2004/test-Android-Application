@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import ru.dron2004.translateapp.app.MainApplication;
 import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.storage.dao.LanguageDAO;
 import ru.dron2004.translateapp.storage.dao.LanguageDAOImpl;
@@ -25,7 +26,7 @@ public class FavoriteFragmentInteactorImpl implements FavoriteFragmentInteactor,
     public FavoriteFragmentInteactorImpl() {
         translationDAO = new TranslationDAOImpl(this,this);
         languageDAO = new LanguageDAOImpl();
-        settingDAO = new SettingDAOImpl();
+        settingDAO = new SettingDAOImpl(MainApplication.getAppContext());
 
     }
 

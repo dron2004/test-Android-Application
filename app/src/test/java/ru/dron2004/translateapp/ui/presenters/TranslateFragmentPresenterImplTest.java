@@ -26,8 +26,6 @@ import static org.mockito.Mockito.when;
 public class TranslateFragmentPresenterImplTest {
     TranslateFragmentView fakeView = mock(TranslateFragmentView.class);
     TranslationFragmentInteractor fakeInteractor = mock(TranslationFragmentInteractor.class);
-//    TranslationFragmentInteractor.TranslationInteractorCallback fakeInteractorCallBackOnTranslation = mock(TranslationFragmentInteractor.TranslationInteractorCallback.class);
-//    TranslationFragmentInteractor.TipsInteractorCallback fakeInteractorCallBackOnTips = mock(TranslationFragmentInteractor.TipsInteractorCallback.class);
     Translation fakeTranslation = mock(Translation.class);
     TranslateDirection fakeTranslateDirection = mock(TranslateDirection.class);
     Language fakeLanguage = mock(Language.class);

@@ -9,9 +9,8 @@ import ru.dron2004.translateapp.actions.CheckApiOnline;
 import ru.dron2004.translateapp.actions.CheckApiOnlineImpl;
 import ru.dron2004.translateapp.actions.SyncDBonStart;
 import ru.dron2004.translateapp.actions.SyncDBonStartImpl;
+import ru.dron2004.translateapp.app.MainApplication;
 import ru.dron2004.translateapp.model.Language;
-import ru.dron2004.translateapp.storage.api.YandexPredictorHelper;
-import ru.dron2004.translateapp.storage.api.YandexTranslateHelper;
 import ru.dron2004.translateapp.storage.dao.LanguageDAO;
 import ru.dron2004.translateapp.storage.dao.LanguageDAOImpl;
 import ru.dron2004.translateapp.storage.dao.SettingDAO;
@@ -23,13 +22,7 @@ public class MainActivityInteractorImpl implements MainActivityInteractor, SyncD
 
     //Ссылки на Хранилища
     private LanguageDAO languageDAO;
-//    private TranslationDAO translationDAO;
-//    private TipsDAO tipsDAO;
     private SettingDAO settingDAO;
-
-    //Ссылки на API
-    private YandexTranslateHelper translateHelper;
-    private YandexPredictorHelper predictorHelper;
 
     private List<Language> appSupportLanguages;
     private final long checkLanguageTablePeriod = (long) 30*24*60*60; //30дней по 24 часа по 60 минут по 60 секунд
@@ -39,10 +32,8 @@ public class MainActivityInteractorImpl implements MainActivityInteractor, SyncD
         registerCallback(callback);
 
         //Инициализируем БД и АПИ
-//        translationDAO = new TranslationDAOImpl(this);
-//        tipsDAO = new TipsDAOImpl();
         languageDAO = new LanguageDAOImpl();
-        settingDAO = new SettingDAOImpl();
+        settingDAO = new SettingDAOImpl(MainApplication.getAppContext());
 
     }
 

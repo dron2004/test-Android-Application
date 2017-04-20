@@ -5,9 +5,15 @@ import java.util.List;
 import ru.dron2004.translateapp.model.Language;
 import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
+import ru.dron2004.translateapp.storage.dao.SettingDAO;
 
 public interface TranslationFragmentInteractor {
 
+    /**
+     * Получить доступ к настройкам
+     * @return
+     */
+    SettingDAO getSettingDAO();
     /**
      * Зарегистрировать Обратный вызов перевода
      * @param callbackListner

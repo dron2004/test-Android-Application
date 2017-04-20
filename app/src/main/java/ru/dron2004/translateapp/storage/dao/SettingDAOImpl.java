@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import ru.dron2004.translateapp.app.MainApplication;
 import ru.dron2004.translateapp.model.Language;
 
 
@@ -14,8 +13,8 @@ public class SettingDAOImpl implements SettingDAO {
     private Context app;
     private SharedPreferences sharedPref;
 
-    public SettingDAOImpl(){
-        app = MainApplication.getAppContext();
+    public SettingDAOImpl(Context context){
+        app = context;
         sharedPref =  app.getSharedPreferences(app.getPackageName(),Context.MODE_PRIVATE);
     }
 

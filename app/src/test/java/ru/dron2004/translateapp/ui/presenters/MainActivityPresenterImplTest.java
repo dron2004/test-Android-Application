@@ -52,7 +52,6 @@ public class MainActivityPresenterImplTest {
 
     @Test
     public void onPause() throws Exception {
-        //TODO Разобраться
         presenter.onPause();
         Assert.assertNull(Whitebox.getInternalState(presenter,"view"));
     }
