@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Переводчик</string>
+    <string name="title_setting">Настройки</string>
+    <string name="title_favorite">Избранное</string>
+    <string name="title_translate">Перевести</string>
+
+    <string name="inputTextPlaceHolder">Введите текст для перевода тут</string>
+    <string name="buttonTranslateTitle">Перевести</string>
+    <string name="buttonAddToFavoritesTitle">В Избранное</string>
+    <string name="internet_connection_required">Это приложение нуждается в доступе к сети интернет для перевода</string>
+    <string name="title_personal_section">Личные настройки</string>
+    <string name="title_fromLangPreference">Переводить с</string>
+    <string name="title_toLangPreference">Переводить на</string>
+    <string name="dialog_title_fromLangPreference">Выберите свой язык</string>
+    <string name="dialog_title_toLangPreference">Выберите язык для перевода</string>
+    <string name="title_app_section">Настройки приложения</string>
+    <string name="no_internet_connection">На вашем устройстве остутствует доступ к сети интернет. Проверьте настройки устройства.</string>
+    <string name="no_internet_permission">Это приложение нуждается в доступе к сети интернет для осуществления переводов.</string>
+    <string name="predictor_apikey_blocked">Ключ Яндекс Предиктора заблокирован.</string>
+    <string name="predictor_apikey_notvalid">Ключ Яндекс Предиктора не верен</string>
+    <string name="predictor_unknown_error">Непредвиденная ошибка Яндекс Предитора</string>
+    <string name="predictor_apikey_daily_exceeded">Превышен дневной лимит Яндекс Предиктора</string>
+    <string name="predictor_apikey_text_to_long_error">Ваш текст более 1000 символов.</string>
+    <string name="predictor_apikey_unsupported_language">Выбран не поддерживаемый предиктором язык</string>
+    <string name="predictor_api_changeFormat">Неверный формат ответа от Яндекс Предиктора. Обновите приложение.</string>
+    <string name="traslate_api_changeFormat">Неверный формат ответа от Яндекс Переводчика. Обновите приложение.</string>
+    <string name="translate_apikey_notvalid">Ключ доступа к Яндекс Переводчику неверен.</string>
+    <string name="translate_apikey_blocked">Ключ доступа к Яндекс Переводчику заблокирован.</string>
+    <string name="translate_apikey_daily_exceeded">Превышен дневной лимит обращений к Яндекс Переводчику</string>
+    <string name="translate_apikey_text_to_long_error">Текст слишком длинный для перевода.</string>
+    <string name="translate_apikey_textnot_translable">Текст не может быть переведен.</string>
+    <string name="translate_apikey_unsupported_language">Выбран неподдерживаемый язык перевода</string>
+    <string name="translate_unknown_error">Неожиданная ошибка Яндекс Переводчика.</string>
+    <string name="add_to_favorite_button">Пометить</string>
+    <string name="remove_from_favorite_button">Снять пометку</string>
+    <string name="no_history_elements">Тут будет храниться история Ваших переводов.</string>
+    <string name="yandex_translate_copy">«Переведено сервисом «Яндекс.Переводчик»</string>
+    <string name="title_about">О программе</string>
+    <string name="text_title_aboutApp">Тестовое приложение для школы мобильной разработки Яндекс - 2017</string>
+    <string name="text_title_aboutAuthor">Автор: dron2004\n Дата создания: 23.04.2017</string>
+    <string name="text_title_aboutCopyTR">«Переведено сервисом «Яндекс.Переводчик»</string>
+    <string name="text_title_aboutCopyPD">«Реализовано с помощью сервиса «Яндекс.Предиктор»</string>
+</resources>

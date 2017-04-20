@@ -20,4 +20,6 @@ public interface MainActivityView extends _BaseView {
      */
     void showAboutFragment();
 
+    void makeSelectionNavigator(int navigationID);
+
 }

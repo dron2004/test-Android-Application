@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private static final String TRANSLATE_FRAGMENT = "Translate Fragment";
     private static final String HISTORY_FRAGMENT = "History Fragment";
     private static final String SETTING_FRAGMENT = "Setting Fragment";
+    private String lastShowingFragment;
+    private String showingFragment;
     private BottomNavigationView navigation;
     private MainActivityPresenter presenter;
 
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,23 +67,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     }
 
-
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            finish();
+        } else {
 
-
+        }
     }
-
-
 
     @Override
     public void showTranslateFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeForFragment, new TranslateFragment());
         transaction.addToBackStack(TRANSLATE_FRAGMENT);
+        lastShowingFragment = showingFragment;
+        showingFragment = TRANSLATE_FRAGMENT;
         transaction.commit();
-//        navigation.setSelectedItemId(R.id.navigation_translate);
+        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
     }
 
     @Override
@@ -88,8 +93,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeForFragment, new FavoriteFragment());
         transaction.addToBackStack(HISTORY_FRAGMENT);
+        lastShowingFragment = showingFragment;
+        showingFragment = HISTORY_FRAGMENT;
         transaction.commit();
-//        navigation.setSelectedItemId(R.id.navigation_favorite);
+        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
     }
 
     @Override
@@ -97,8 +104,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeForFragment, new AboutFragment());
         transaction.addToBackStack(SETTING_FRAGMENT);
+        lastShowingFragment = showingFragment;
+        showingFragment = SETTING_FRAGMENT;
         transaction.commit();
-//        navigation.setSelectedItemId(R.id.navigation_setting);
+        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
+    }
+
+    @Override
+    public void makeSelectionNavigator(int navigationID) {
+        navigation.setSelectedItemId(navigationID);
     }
 
     @Override
