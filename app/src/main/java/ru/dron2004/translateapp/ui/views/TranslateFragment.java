@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -284,8 +285,14 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 } else {
                     //Если подсказка не соответсвует слову
                     //Начало слова
-                    newBefore = before.substring(0, before.length() - wordBegin.length() - 1);
-                    lastSpanned = newBefore.length();
+                    //TODO СЛОМАЛОСЬ!!!!!!!!!!! калина
+                    //TODO После установки не показываются подсказки - проблемма в отображении POPUP (1ый раз!)
+
+                    int lengthBefore = before.length() - wordBegin.length();
+                    if (lengthBefore > 0) {
+                        newBefore = before.substring(0, lengthBefore - 1);
+                        lastSpanned = newBefore.length() - 1;
+                    }
                     addonSpace = " ";
                     needToAddTip = true;
                 }
@@ -297,7 +304,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
             }
             SpannableString tipSpanned = new SpannableString(newBefore + addonSpace + newTip);
-//            Log.d("happy","text: |"+tipSpanned+"| newBefore:|"+newBefore+"| newTip:|"+newTip+"| lastSpanned:"+lastSpanned);
+            Log.d("happy","text: |"+tipSpanned+"| newBefore:|"+newBefore+"| newTip:|"+newTip+"| lastSpanned:"+lastSpanned);
             tipSpanned.setSpan(new ForegroundColorSpan(Color.BLUE), startSpanned, lastSpanned,0);
             tipsSpanned.add(tipSpanned);
             if (needToAddTip) {

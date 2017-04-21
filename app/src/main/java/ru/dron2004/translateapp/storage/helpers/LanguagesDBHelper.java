@@ -29,7 +29,7 @@ public class LanguagesDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("happy", "--- onCreate database "+dbFileName+" ---");
+        Log.d("happy", "--- onCreate database "+dbFileName.replace("%%%UI%%%",userLanguage)+" ---");
         //Создаем таблицу хранящую наименование языков
         db.execSQL("create table "+LANG_TABLE_NAME+" ("
                 + _IDENT  + " TEXT NOT NULL PRIMARY KEY,"
