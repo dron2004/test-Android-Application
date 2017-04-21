@@ -1,5 +1,7 @@
 package ru.dron2004.translateapp.ui.presenters;
 
+import android.util.Log;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -89,7 +91,7 @@ public class TranslateFragmentPresenterImpl
 
     @Override
     public void onTextToTranslateTyped(String text) {
-//        Log.d("happy","Presenter has new text:"+text);
+        Log.d("happy","Presenter has new text:"+text);
         TranslateFragmentView v = view.get();
         if (v != null) {
             if (!text.isEmpty()) {
@@ -145,7 +147,7 @@ public class TranslateFragmentPresenterImpl
     public void onTipsSuccess(final List<String> response) {
         //Сохраним в презентере для перестраения фрагмента
         tipsList = response;
-//        Log.d("happy","Chached Tips:"+tipsList);
+        Log.d("happy","Cached Tips:"+tipsList);
         //Подсказки получены - берите
         final TranslateFragmentView v = view.get();
         if (v != null) {

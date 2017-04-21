@@ -209,8 +209,9 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     public void showTipsList(List<String> tipsList) {
         //Сохранили подсказки
         this.tipsList = tipsList;
-//        Log.d("happy","Tipsы привалили:"+tipsList);
+        Log.d("happy","Tipsы привалили:"+tipsList);
         if (getActivity() != null) {
+            Log.d("happy","Activity OK");
             showPopUpListView(textToTranslate.getText().toString());
         }
     }
@@ -218,14 +219,14 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     private void showPopUpListView(String before) {
         if (popUpWindow == null) {
-//            Log.d("happy","PopUp was NULL - create to activity:"+getActivity());
+            Log.d("happy","PopUp was NULL - create to activity:"+getActivity());
             popUpWindow = new ListPopupWindow(getActivity());
         }
         if (popUpWindow.isShowing()) {
-//            Log.d("happy","PopUp is show - change ADAPTER");
+            Log.d("happy","PopUp is show - change ADAPTER");
             popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
         } else {
-//            Log.d("happy","PopUp need to show - create new tipsAdapter and show");
+            Log.d("happy","PopUp need to show - create new tipsAdapter and show");
             popUpWindow.setAnchorView(textToTranslate);
             popUpWindow.setVerticalOffset(getActivity().getResources().getDimensionPixelOffset(R.dimen.tips_popup_vertical_offset));
             popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
@@ -247,7 +248,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
         if (popUpWindow != null) {
             popUpWindow.dismiss();
             popUpWindow = null;
-//            Log.d("happy", "PopUp is Dissmissed");
+            Log.d("happy", "PopUp is Dissmissed");
         }
     }
 
