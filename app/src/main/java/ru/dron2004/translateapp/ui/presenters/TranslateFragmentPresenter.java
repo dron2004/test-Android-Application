@@ -4,6 +4,7 @@ import java.util.List;
 
 import ru.dron2004.translateapp.interactors.TranslationFragmentInteractor;
 import ru.dron2004.translateapp.model.Language;
+import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.ui._BasePresenter;
 import ru.dron2004.translateapp.ui.views.TranslateFragmentView;
@@ -67,4 +68,9 @@ public interface TranslateFragmentPresenter
     void onError(String errorMsg);
 
 
+    /**
+     * Поменять направление перевода
+     * @return
+     */
+    TranslateDirection exchangeTranslateDirection();
 }

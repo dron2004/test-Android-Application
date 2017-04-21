@@ -126,6 +126,16 @@ public class TranslationFragmentInteractorImpl
         getSettingDAO().setFromLanguage(from);
     }
 
+    @Override
+    public TranslateDirection exchangeTranslateDirection() {
+        Language oldFrom=translateDirection.from;
+        Language oldTo = translateDirection.to;
+
+        changeTranslateDirectionFrom(oldTo);
+        changeTranslateDirectionTo(oldFrom);
+        return translateDirection;
+    }
+
     //ПОЛУЧЕНИЕ ПЕРЕВОДА
     @Override
     public void getTranslation(String text) {

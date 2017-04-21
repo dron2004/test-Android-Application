@@ -125,11 +125,18 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
 
             exchangeTranslateDirection = (ImageView) getView().findViewById(R.id.exchangeTranslateDirection);
+            exchangeTranslateDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setTranslateDirection(getPresenter().exchangeTranslateDirection());
+                }
+            });
 
             //Отправляем в презентер клики по кнопке Перевода
             buttonTranslate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //TODO Возвращает фокус на первй элемент на фрагменте а это и есть EditText
                     textToTranslate.clearFocus();
                     getPresenter().translateText(getTextToTranslate());
                 }
@@ -222,10 +229,11 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
             Log.d("happy","PopUp was NULL - create to activity:"+getActivity());
             popUpWindow = new ListPopupWindow(getActivity());
         }
-        if (popUpWindow.isShowing()) {
-            Log.d("happy","PopUp is show - change ADAPTER");
-            popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
-        } else {
+        //TODO при первом запуске на устроястве PopUp не отображается :(
+//        if (popUpWindow.isShowing()) {
+//            Log.d("happy","PopUp is show - change ADAPTER");
+//            popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
+//        } else {
             Log.d("happy","PopUp need to show - create new tipsAdapter and show");
             popUpWindow.setAnchorView(textToTranslate);
             popUpWindow.setVerticalOffset(getActivity().getResources().getDimensionPixelOffset(R.dimen.tips_popup_vertical_offset));
@@ -241,7 +249,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 }
             });
             popUpWindow.show();
-        }
+//        }
     }
 
     private void hidePopUpListView(){
@@ -319,8 +327,8 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     @Override
     public void setTranslateDirection(TranslateDirection dir) {
-        spinnerFrom.setSelection(languagesList.indexOf(dir.from));
-        spinnerTo.setSelection(languagesList.indexOf(dir.to));
+        spinnerFrom.setSelection(languagesList.indexOf(dir.from),true);
+        spinnerTo.setSelection(languagesList.indexOf(dir.to),true);
     }
 
     @Override

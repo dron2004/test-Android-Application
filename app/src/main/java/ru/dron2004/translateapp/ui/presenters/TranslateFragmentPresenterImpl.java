@@ -7,6 +7,7 @@ import java.util.List;
 
 import ru.dron2004.translateapp.interactors.TranslationFragmentInteractor;
 import ru.dron2004.translateapp.model.Language;
+import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
 import ru.dron2004.translateapp.ui.views.TranslateFragmentView;
 
@@ -167,6 +168,16 @@ public class TranslateFragmentPresenterImpl
         TranslateFragmentView v = view.get();
         if (v != null)
             v.showError(errorMsg);
+    }
+
+    @Override
+    public TranslateDirection exchangeTranslateDirection() {
+        TranslateDirection newTD = interactor.exchangeTranslateDirection();
+        TranslateFragmentView v = view.get();
+        if (v != null) {
+            v.setTranslateDirection(newTD);
+        }
+        return newTD;
     }
 
 }

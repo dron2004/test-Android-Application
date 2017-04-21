@@ -65,6 +65,12 @@ public interface TranslationFragmentInteractor {
      */
     void changeTranslateDirectionFrom(Language from);
 
+    /**
+     * Поменять направление перевода
+     * @return
+     */
+    TranslateDirection exchangeTranslateDirection();
+
     //API обратного вызова
     interface TranslationInteractorCallback {
         /**
