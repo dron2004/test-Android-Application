@@ -45,7 +45,7 @@ public class TranslateFragmentPresenterImpl
             //Если есть полученный перевод
             if (currentTranslation != null) {
                 //Выставляем текст для перевода
-                //TODO вызывает событие изменения текста и как следствие показ подсказок
+                //Решил воспользоваться сохранением состояния самого фрагмента по ID EditText
 //                v.setTextToTranslate(currentTranslation.textToTranslate);
 //                //Выставляем направление перевода
                 v.setTranslateDirection(currentTranslation.translateDirection);

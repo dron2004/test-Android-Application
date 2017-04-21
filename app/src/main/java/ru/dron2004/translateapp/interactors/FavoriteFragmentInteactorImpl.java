@@ -65,7 +65,7 @@ public class FavoriteFragmentInteactorImpl implements FavoriteFragmentInteactor,
 
     @Override
     public void onTranslationListSuccess(List<Translation> translationList) {
-        Log.d("happy","Вернулись с историей в интерактор");
+//        Log.d("happy","Вернулись с историей в интерактор");
         //TODO надо ли заполнять названия языков ?
         historyListner.onHistorySuccess(translationList);
     }

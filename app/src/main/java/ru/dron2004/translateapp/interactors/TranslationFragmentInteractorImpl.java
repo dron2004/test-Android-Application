@@ -178,7 +178,7 @@ public class TranslationFragmentInteractorImpl
                             onTipsEmpty(text,from);
                         }
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
             });

@@ -72,7 +72,6 @@ public class SyncDBonStartImplTest {
 
     @Test
     public void onTranslateSupportLanguage() throws Exception {
-        //TODO Описать логику пересечения полученных массивов языков
         //Типа возвращенные языки из предиктора
         Whitebox.setInternalState(action,"predictorLanguages",predictorLanguages);
         action.onTranslateSupportLanguage(translateLanguages);
