@@ -34,6 +34,7 @@
             android:hint="@string/inputTextPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingRight="55dp"
             android:imeOptions="flagNoExtractUi|actionDone"
             android:id="@+id/textToTranslate"/>
         <Button

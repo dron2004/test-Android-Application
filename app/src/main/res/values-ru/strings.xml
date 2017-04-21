@@ -4,7 +4,7 @@
     <string name="title_favorite">Избранное</string>
     <string name="title_translate">Перевести</string>
 
-    <string name="inputTextPlaceHolder">Введите текст для перевода тут</string>
+    <string name="inputTextPlaceHolder">Введите текст ...</string>
     <string name="buttonTranslateTitle">Перевести</string>
     <string name="buttonAddToFavoritesTitle">В Избранное</string>
     <string name="internet_connection_required">Это приложение нуждается в доступе к сети интернет для перевода</string>

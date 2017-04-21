@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,7 +130,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 @Override
                 public void onClick(View v) {
                     textToTranslate.clearFocus();
-                    KeyBoardUtils.hide(getActivity());
                     getPresenter().translateText(getTextToTranslate());
                 }
             });
@@ -183,6 +181,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     public void setTranslatedText(String text) {
         yandexTranslateCopy.setText(LocaleUtils.getLocaleStringResource(R.string.yandex_translate_copy));
         translatedTextView.setText(text.trim());
+        KeyBoardUtils.hide(getActivity());
     }
 
     @Override
@@ -232,7 +231,9 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
             popUpWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    textToTranslate.setText(((TipsAdapter) parent.getAdapter()).getSelectedTip(position));
+                    String tipSelected = ((TipsAdapter) parent.getAdapter()).getSelectedTip(position);
+                    tipsList.clear();
+                    textToTranslate.setText(tipSelected);
                     textToTranslate.setSelection(textToTranslate.length());
                     popUpWindow.dismiss();
                 }
@@ -257,7 +258,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     private TipsAdapter createTipsAdapter(String before,List<String> tips){
         ArrayList<SpannableString> tipsSpanned = new ArrayList<>();
-        String newBefore = before;
         String wordBegin;
         if (before.contains(" ")) {
             //Если есть пробел то подсказка к последнему слову
@@ -266,30 +266,45 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
             //если пробелов нет то ко всему тексту
             wordBegin = before;
         }
-        Log.d("happy","WordBegin:"+wordBegin);
+//        Log.d("happy","WordBegin:|"+wordBegin+"| + before:|"+before+"|");
 
         for (String tip : tips) {
-                String newTip = tip;
-                int startSpanned = 0;
-                int lastSpanned = 0;
-                String addonSpace = " ";
+            boolean needToAddTip = false;
+            String newBefore = before;
+            String newTip = tip;
+            int startSpanned = 0;
+            int lastSpanned = 0;
+            String addonSpace = " ";
+            if (!wordBegin.isEmpty()) {
                 if (tip.startsWith(wordBegin)) {
-                    if (!wordBegin.isEmpty())
-                        newTip = tip.substring(wordBegin.length());
+//                    Если подсказка начинается с последнего слова
+                    newTip = tip.substring(wordBegin.length());
                     lastSpanned = before.length();
                     addonSpace = "";
                 } else {
-                    //TODO куст серени
-//                    if (!wordBegin.isEmpty()){
-////                        newTip = tip;
-//                        lastSpanned = before.length()-1-wordBegin.length()-1;
-//                        newBefore = before.substring(0,before.length()-wordBegin.length());
-////                        addonSpace = " ";
-//                    }
+                    //Если подсказка не соответсвует слову
+                    //Начало слова
+                    newBefore = before.substring(0, before.length() - wordBegin.length() - 1);
+                    lastSpanned = newBefore.length();
+                    addonSpace = " ";
+                    needToAddTip = true;
                 }
-                SpannableString tipSpanned = new SpannableString(newBefore + addonSpace + newTip);
-                tipSpanned.setSpan(new ForegroundColorSpan(Color.BLUE), startSpanned, lastSpanned,0);
+            } else {
+//                Если продолжили пробелом
+                newBefore = before;
+                lastSpanned = newBefore.length();
+                addonSpace = "";
+
+            }
+            SpannableString tipSpanned = new SpannableString(newBefore + addonSpace + newTip);
+//            Log.d("happy","text: |"+tipSpanned+"| newBefore:|"+newBefore+"| newTip:|"+newTip+"| lastSpanned:"+lastSpanned);
+            tipSpanned.setSpan(new ForegroundColorSpan(Color.BLUE), startSpanned, lastSpanned,0);
+            tipsSpanned.add(tipSpanned);
+            if (needToAddTip) {
+                tipSpanned = new SpannableString(before + addonSpace + tip);
+                tipSpanned.setSpan(new ForegroundColorSpan(Color.BLUE), startSpanned, newBefore.length(),0);
                 tipsSpanned.add(tipSpanned);
+            }
         }
         return new TipsAdapter(getActivity(),R.layout.tip_element,tipsSpanned);
     }
