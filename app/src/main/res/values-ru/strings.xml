@@ -18,10 +18,10 @@
     <string name="no_internet_permission">Это приложение нуждается в доступе к сети интернет для осуществления переводов.</string>
     <string name="predictor_apikey_blocked">Ключ Яндекс Предиктора заблокирован.</string>
     <string name="predictor_apikey_notvalid">Ключ Яндекс Предиктора не верен</string>
-    <string name="predictor_unknown_error">Непредвиденная ошибка Яндекс Предитора</string>
+    <string name="predictor_unknown_error">Непредвиденная ошибка Яндекс Предиктора</string>
     <string name="predictor_apikey_daily_exceeded">Превышен дневной лимит Яндекс Предиктора</string>
     <string name="predictor_apikey_text_to_long_error">Ваш текст более 1000 символов.</string>
-    <string name="predictor_apikey_unsupported_language">Выбран не поддерживаемый предиктором язык</string>
+    <string name="predictor_apikey_unsupported_language">Выбран не поддерживаемый Предиктором язык</string>
     <string name="predictor_api_changeFormat">Неверный формат ответа от Яндекс Предиктора. Обновите приложение.</string>
     <string name="traslate_api_changeFormat">Неверный формат ответа от Яндекс Переводчика. Обновите приложение.</string>
     <string name="translate_apikey_notvalid">Ключ доступа к Яндекс Переводчику неверен.</string>
@@ -40,10 +40,10 @@
     <string name="text_title_aboutAuthor">Автор: dron2004\n Дата создания: 23.04.2017</string>
     <string name="text_title_aboutCopyTR">Переведено сервисом «Яндекс.Переводчик»</string>
     <string name="text_title_aboutCopyPD">Реализовано с помощью сервиса «Яндекс.Предиктор»</string>
-    <string name="dictionary_apikey_notvalid">Yandex Dictionary API Key not valid</string>
-    <string name="dictionary_apikey_daily_exceeded">Yandex Dictionary Daily limit exceed</string>
-    <string name="dictionary_apikey_text_to_long_error">Yandex Dictionary input text too long</string>
-    <string name="dictionary_apikey_unsupported_language">Yandex Dictionary API Key not support this languages</string>
-    <string name="dictionary_unknown_error">Yandex Dictionary Unknown Error</string>
-    <string name="dictionary_api_changeFormat">Yandex Dictionary API change format. Update app</string>
+    <string name="dictionary_apikey_notvalid">Ключ для Яндекс Словаря неверный</string>
+    <string name="dictionary_apikey_daily_exceeded">Превышен дневной лимит обращений к Яндекс Словарю</string>
+    <string name="dictionary_apikey_text_to_long_error">Запрос к Яндекс Словарю более 10000 символов.</string>
+    <string name="dictionary_apikey_unsupported_language">Яндекс словарь не поддерживает язык перевода</string>
+    <string name="dictionary_unknown_error">Непредвиденная ошибка Яндекс Словаря</string>
+    <string name="dictionary_api_changeFormat">АПИ Яндекс словаря изменило формат. Обновите приложение.</string>
 </resources>
