@@ -1,7 +1,6 @@
 package ru.dron2004.translateapp.ui.view_adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,19 +59,35 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         notifyItemRemoved(position);
     }
 
+
+    //Проброска события клика для инвертирования избранности
+    private void toggleFavorite(int adapterPosition) {
+//        Log.d("happy","Adapter Position:"+adapterPosition);
+        presenter.toggleHistoryFavorite(dataset.get(adapterPosition));
+        //Перегружаем все -
+        notifyItemChanged(adapterPosition);
+//        notifyItemMoved(adapterPosition,0);
+        notifyDataSetChanged();
+    }
+
+    //Проброска события клика для отображения перевода во всей красе
+    private void showTranslation(int adapterPosition) {
+        presenter.showTranslation(dataset.get(adapterPosition));
+    }
+
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
+        public View historyItem;
         public TextView textSrc,textDst,translateDirection;
         public ImageView favoriteIcon;
         public Translation translation;
 
         public ViewHolder(View v, final HistoryAdapter adapter) {
             super(v);
-//            presenter = (FavoriteFragmentPresenter) v.getTag();
-
             textDst = (TextView) v.findViewById(R.id.textDst);
             textSrc = (TextView) v.findViewById(R.id.textSrc);
             translateDirection = (TextView) v.findViewById(R.id.translateDirection);
@@ -80,8 +95,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             favoriteIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                    adapter.toggleFavorite(getAdapterPosition());
+                }
+                }
+            });
+            historyItem = (View) v.findViewById(R.id.historyItem);
+            historyItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                        adapter.toggleFavorite(getAdapterPosition());
+                        adapter.showTranslation(getAdapterPosition());
                     }
                 }
             });
@@ -105,12 +129,5 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
     }
 
-    private void toggleFavorite(int adapterPosition) {
-        Log.d("happy","Adapter Position:"+adapterPosition);
-        presenter.toggleHistoryFavorite(dataset.get(adapterPosition));
-        //Перегружаем все -
-        notifyItemChanged(adapterPosition);
-//        notifyItemMoved(adapterPosition,0);
-        notifyDataSetChanged();
-    }
+
 }

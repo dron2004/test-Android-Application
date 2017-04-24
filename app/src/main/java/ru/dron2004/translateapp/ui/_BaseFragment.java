@@ -3,7 +3,6 @@ package ru.dron2004.translateapp.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
         super.onCreate(savedInstanceState);
         //При создании фрагмента - вытаскиваем презентер из кэша, или создаем новый фабрикой
         this.presenter = this.presenterCache.getPresenter(TAG, this.presenterFactory);
-        Log.d("happy","["+TAG+"] get ["+getPresenter()+"] from Cache or Factory");
+//        Log.d("happy","["+TAG+"] get ["+getPresenter()+"] from Cache or Factory");
     }
 
     @Nullable
@@ -42,7 +41,7 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
         super.onViewCreated(view, savedInstanceState);
         //Как только VIEW готова - подписываем презентер на нее
         getPresenter().setView(getFragment());
-        Log.d("happy","["+TAG+"] Presenter set View");
+//        Log.d("happy","["+TAG+"] Presenter set View");
     }
 
     @Override
@@ -50,7 +49,7 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
         super.onResume();
         //Выставляем флаг что фрагмент существует
         this.isDestroyedBySystem = false;
-        Log.d("happy","["+TAG+"] Presenter flag isDestroyedBySystem now FALSE");
+//        Log.d("happy","["+TAG+"] Presenter flag isDestroyedBySystem now FALSE");
     }
 
     @Override
@@ -58,7 +57,7 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
         super.onSaveInstanceState(outState);
         //Если пошли сохранять State - значит скоро помрем, ставим флаг
         this.isDestroyedBySystem = true;
-        Log.d("happy","["+TAG+"] Presenter flag isDestroyedBySystem now TRUE");
+//        Log.d("happy","["+TAG+"] Presenter flag isDestroyedBySystem now TRUE");
     }
 
     @Override
@@ -66,7 +65,7 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
         super.onDestroyView();
         //В момент уничтожения View отписываем презентер от нее
         getPresenter().unsetView();
-        Log.d("happy","["+TAG+"] Presenter unset View");
+//        Log.d("happy","["+TAG+"] Presenter unset View");
     }
 
     @Override
@@ -76,7 +75,7 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
             //Если фрагмент был активен - при полноценном дестоинге надо убрать его из кэша
             //TODO подумать о переносе во onStop
             presenterCache.removePresenter(TAG);
-            Log.d("happy","["+TAG+"] Presenter["+getPresenter()+"] removed from Cache");
+//            Log.d("happy","["+TAG+"] Presenter["+getPresenter()+"] removed from Cache");
         }
     }
 

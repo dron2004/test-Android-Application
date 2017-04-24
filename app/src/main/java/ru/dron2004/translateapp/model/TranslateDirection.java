@@ -1,6 +1,8 @@
 package ru.dron2004.translateapp.model;
 
-public class TranslateDirection {
+import java.io.Serializable;
+
+public class TranslateDirection implements Serializable{
     public Language from;
     public Language to;
 

@@ -1,6 +1,8 @@
 package ru.dron2004.translateapp.model;
 
-public class Language {
+import java.io.Serializable;
+
+public class Language implements Serializable {
     public String ident;
     public String title;
 

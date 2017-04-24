@@ -20,9 +20,9 @@ public class WidgetUtils {
 //            Log.d("happy","TextSize:"+size);
 //            Log.d("happy","MaxTextSize:"+maxTextSizePx);
 //            Log.d("happy","LineCount:"+textView.getLineCount());
-            if (bounds.height() > textView.getHeight()+15){
-                break;
-            }
+//            if (bounds.height() > textView.getHeight()+15){
+//                break;
+//            }
             if(bounds.width() > maxWidthPx){
                 break;
             }

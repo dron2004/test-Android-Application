@@ -73,4 +73,9 @@ public interface TranslateFragmentPresenter
      * @return
      */
     TranslateDirection exchangeTranslateDirection();
+
+    /**
+     * Клик на переводе
+     */
+    void translateClicked();
 }

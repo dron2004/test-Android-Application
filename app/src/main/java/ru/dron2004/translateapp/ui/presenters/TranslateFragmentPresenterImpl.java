@@ -1,5 +1,6 @@
 package ru.dron2004.translateapp.ui.presenters;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
@@ -9,6 +10,7 @@ import ru.dron2004.translateapp.interactors.TranslationFragmentInteractor;
 import ru.dron2004.translateapp.model.Language;
 import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
+import ru.dron2004.translateapp.ui.views.DetailActivity;
 import ru.dron2004.translateapp.ui.views.TranslateFragmentView;
 
 public class TranslateFragmentPresenterImpl
@@ -39,52 +41,48 @@ public class TranslateFragmentPresenterImpl
     @Override
     public void onStart() {
         //Инициализируем интерфейс фрагмента
-        TranslateFragmentView v = view.get();
-        if (v != null){
+        if (view  != null) {
+            TranslateFragmentView v = view.get();
+            if (v != null) {
 
-            //Восстановим список языков
-            v.setLanguagesList(interactor.getLanguages());
+                //Восстановим список языков
+                v.setLanguagesList(interactor.getLanguages());
 
-            //Если есть полученный перевод
-            if (currentTranslation != null) {
-                //Выставляем текст для перевода
-                //Решил воспользоваться сохранением состояния самого фрагмента по ID EditText
-//                v.setTextToTranslate(currentTranslation.textToTranslate);
-//                //Выставляем направление перевода
-                v.setTranslateDirection(currentTranslation.translateDirection);
-//                //Выставляем переведенный текст
-                v.setTranslatedText(currentTranslation.translatedText);
-                v.showAddToFavoritesBtn(currentTranslation.isFavorite());
-            } else {
-            //Если нет полученного перевода - перевернули в процессе
-                v.setTranslateDirection(interactor.getTranslateDirection());
-                //Если был введен текст,
-                // показать кнопку перевести
-                if (v.getTextToTranslate().isEmpty()) {
-                    v.hideTranslateBtn();
+                //Если есть полученный перевод
+                if (currentTranslation != null) {
+                    //Выставляем текст для перевода
+                    //Решил воспользоваться сохранением состояния самого фрагмента по ID EditText - теперь можно - при програмном обновлении поля мы гасим слушатель текста
+                    v.setTextToTranslate(currentTranslation.textToTranslate);
+    //                //Выставляем направление перевода
+                    v.setTranslateDirection(currentTranslation.translateDirection);
+    //                //Выставляем переведенный текст
+                    v.setTranslatedText(currentTranslation.translatedText);
+                    v.showAddToFavoritesBtn(currentTranslation.isFavorite());
                 } else {
-                    v.showTranslateBtn();
+                    //Если нет полученного перевода - перевернули в процессе
+                    v.setTranslateDirection(interactor.getTranslateDirection());
+                    //Если был введен текст,
+                    // показать кнопку перевести
+                    if (v.getTextToTranslate().isEmpty()) {
+                        v.hideTranslateBtn();
+                    } else {
+                        v.showTranslateBtn();
+                    }
                 }
+
             }
-
-
-
-//// TODO: 18.04.2017 Узнать жизненный цикл ListPopupWindow
-//            if (tipsList != null) {
-//                Log.d("happy","Есть сохраненные типсы:"+tipsList);
-//                if (tipsList.size()>0)
-//                    v.showTipsList(tipsList);
-//            }
         }
 
     }
 
     @Override
     public void onPause() {
-        TranslateFragmentView v = view.get();
-        if (v != null) {
-            //Опустошаем список подсказок
-            v.hideTipsList();
+        if (view  != null) {
+            TranslateFragmentView v = view.get();
+            if (v != null) {
+                //Опустошаем список подсказок
+                v.hideTipsList();
+            }
         }
         //Зануляем view
         if(view != null) view = null;
@@ -92,19 +90,21 @@ public class TranslateFragmentPresenterImpl
 
     @Override
     public void onTextToTranslateTyped(String text) {
-        Log.d("happy","Presenter has new text:"+text);
-        TranslateFragmentView v = view.get();
-        if (v != null) {
-            if (!text.isEmpty()) {
-                //Отобразить загрузку типсов
-                v.showTipsLoadingProgress();
-                //Показать кнопку перевода
-                v.showTranslateBtn();
-                interactor.getTipsForText(text);
-            } else {
-                v.hideTranslateBtn();
-                v.hideTipsLoadingProgress();
-                v.hideTipsList();
+//        Log.d("happy","Presenter has new text:"+text);
+        if (view  != null) {
+            TranslateFragmentView v = view.get();
+            if (v != null) {
+                if (!text.isEmpty()) {
+                    //Отобразить загрузку типсов
+                    v.showTipsLoadingProgress();
+                    //Показать кнопку перевода
+                    v.showTranslateBtn();
+                    interactor.getTipsForText(text);
+                } else {
+                    v.hideTranslateBtn();
+                    v.hideTipsLoadingProgress();
+                    v.hideTipsList();
+                }
             }
         }
     }
@@ -136,10 +136,12 @@ public class TranslateFragmentPresenterImpl
         //Закешируем перевод
         currentTranslation = translation;
         //Перевод готов - нате
-        TranslateFragmentView v = view.get();
-        if (v != null) {
-            v.setTranslatedText(translation.translatedText);
-            v.showAddToFavoritesBtn(translation.isFavorite());
+        if (view  != null) {
+            TranslateFragmentView v = view.get();
+            if (v != null) {
+                v.setTranslatedText(translation.translatedText);
+                v.showAddToFavoritesBtn(translation.isFavorite());
+            }
         }
     }
 
@@ -150,16 +152,18 @@ public class TranslateFragmentPresenterImpl
         tipsList = response;
         Log.d("happy","Cached Tips:"+tipsList);
         //Подсказки получены - берите
-        final TranslateFragmentView v = view.get();
-        if (v != null) {
-            v.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    v.hideTipsLoadingProgress();
-                    v.showTipsList(response);
-                }
-            });
+        if (view  != null) {
+            final TranslateFragmentView v = view.get();
+            if (v != null) {
+                v.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.hideTipsLoadingProgress();
+                        v.showTipsList(response);
+                    }
+                });
 
+            }
         }
     }
 
@@ -173,11 +177,27 @@ public class TranslateFragmentPresenterImpl
     @Override
     public TranslateDirection exchangeTranslateDirection() {
         TranslateDirection newTD = interactor.exchangeTranslateDirection();
-        TranslateFragmentView v = view.get();
-        if (v != null) {
-            v.setTranslateDirection(newTD);
+        if (view!=null) {
+            TranslateFragmentView v = view.get();
+            if (v != null) {
+                v.setTranslateDirection(newTD);
+            }
         }
         return newTD;
+    }
+
+    @Override
+    public void translateClicked() {
+        if (currentTranslation != null) {
+            if (view!=null) {
+                TranslateFragmentView v = view.get();
+                if (v != null) {
+                    Intent intent = new Intent(v.getActivity(), DetailActivity.class);
+                    intent.putExtra("TRANSLATION", currentTranslation);
+                    v.getActivity().startActivity(intent);
+                }
+            }
+        }
     }
 
 }

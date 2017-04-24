@@ -1,5 +1,7 @@
 package ru.dron2004.translateapp.ui.views;
 
+import android.app.Activity;
+
 import java.util.List;
 
 import ru.dron2004.translateapp.model.Translation;
@@ -22,4 +24,10 @@ public interface FavoriteFragmentView extends _BaseView {
      * Показать пустой список
      */
     void setEmptyHistory();
+
+    /**
+     * Вернуть ссылку на активность
+     * @return
+     */
+    Activity getActivity();
 }

@@ -11,6 +11,7 @@ import ru.dron2004.translateapp.storage.api.YandexTranslateCallback;
 import ru.dron2004.translateapp.storage.api.YandexTranslateHelper;
 import ru.dron2004.translateapp.storage.dao.LanguageDAO;
 import ru.dron2004.translateapp.storage.dao.LanguageDAOImpl;
+import ru.dron2004.translateapp.storage.dao.SettingDAO;
 import ru.dron2004.translateapp.utility.LocaleUtils;
 
 public class SyncDBonStartImpl
@@ -22,6 +23,7 @@ public class SyncDBonStartImpl
     private SyncDBonStart.Callback listner;
     //Ссылки на Хранилища
     private LanguageDAO languageDAO;
+    private SettingDAO settingDAO;
 
     //Ссылки на API
     private YandexTranslateHelper translateHelper;

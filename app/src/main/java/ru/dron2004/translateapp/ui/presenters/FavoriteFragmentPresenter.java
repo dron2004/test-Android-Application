@@ -34,4 +34,10 @@ public interface FavoriteFragmentPresenter extends _BasePresenter<FavoriteFragme
      * @param translation
      */
     void historyItemSwipeRight(Translation translation);
+
+    /**
+     * Показ перевода по клику на чем угодно кроме избранного
+     * @param translation
+     */
+    void showTranslation(Translation translation);
 }

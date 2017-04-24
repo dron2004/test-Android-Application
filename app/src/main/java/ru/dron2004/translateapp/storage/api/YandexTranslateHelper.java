@@ -1,7 +1,5 @@
 package ru.dron2004.translateapp.storage.api;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +40,7 @@ public class YandexTranslateHelper {
         api.translate(apiKey,text,translateDirection.toString()).enqueue(new Callback<TranslateResponse>() {
             @Override
             public void onResponse(Call<TranslateResponse> call, Response<TranslateResponse> response) {
-                Log.d("happy","Translate call:"+call.request());
+//                Log.d("happy","Translate call:"+call.request());
                 if (response.body() != null) {
                     String translatedText = "";
                     //Пришел форматированный ответ - собираем
@@ -65,8 +63,8 @@ public class YandexTranslateHelper {
 
             @Override
             public void onFailure(Call<TranslateResponse> call, Throwable t) {
-                Log.d("happy","Error:"+ t.getMessage());
-                Log.d("happy","Error:"+ t.getLocalizedMessage());
+//                Log.d("happy","Error:"+ t.getMessage());
+//                Log.d("happy","Error:"+ t.getLocalizedMessage());
                 listner.onTranslateAPIError(t.getLocalizedMessage());
             }
         });
@@ -77,7 +75,7 @@ public class YandexTranslateHelper {
         api.getSupportedLanguages(apiKey,locale).enqueue(new Callback<TranslateSupportLanguagesResponse>() {
             @Override
             public void onResponse(Call<TranslateSupportLanguagesResponse> call, Response<TranslateSupportLanguagesResponse> response) {
-                Log.d("happy","Translate support call:"+call.request());
+//                Log.d("happy","Translate support call:"+call.request());
                 if (response.body() != null) {
                     //Пришел форматированный ответ - собираем
                     List<Language> resultList = new ArrayList<Language>();
@@ -100,8 +98,8 @@ public class YandexTranslateHelper {
 
             @Override
             public void onFailure(Call<TranslateSupportLanguagesResponse> call, Throwable t) {
-                Log.d("happy","Error:"+ t.getMessage());
-                Log.d("happy","Error:"+ t.getLocalizedMessage());
+//                Log.d("happy","Error:"+ t.getMessage());
+//                Log.d("happy","Error:"+ t.getLocalizedMessage());
                 listner.onTranslateAPIError(t.getLocalizedMessage());
             }
         });

@@ -1,7 +1,5 @@
 package ru.dron2004.translateapp.interactors;
 
-import android.util.Log;
-
 import java.util.List;
 
 import ru.dron2004.translateapp.app.MainApplication;
@@ -66,7 +64,7 @@ public class FavoriteFragmentInteactorImpl implements FavoriteFragmentInteactor,
     @Override
     public void onTranslationListSuccess(List<Translation> translationList) {
 //        Log.d("happy","Вернулись с историей в интерактор");
-        //TODO надо ли заполнять названия языков ?
+        //TODO по уму - надо заполнять названия языков
         historyListner.onHistorySuccess(translationList);
     }
 

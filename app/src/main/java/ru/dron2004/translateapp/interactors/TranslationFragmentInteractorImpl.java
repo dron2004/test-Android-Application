@@ -9,6 +9,8 @@ import ru.dron2004.translateapp.model.Language;
 import ru.dron2004.translateapp.model.PackageModel;
 import ru.dron2004.translateapp.model.TranslateDirection;
 import ru.dron2004.translateapp.model.Translation;
+import ru.dron2004.translateapp.model.dr.DictionaryResponce;
+import ru.dron2004.translateapp.storage.api.YandexDictionaryCallback;
 import ru.dron2004.translateapp.storage.api.YandexPredictorCallback;
 import ru.dron2004.translateapp.storage.api.YandexPredictorHelper;
 import ru.dron2004.translateapp.storage.api.YandexTranslateCallback;
@@ -28,7 +30,7 @@ public class TranslationFragmentInteractorImpl
         TranslationDAO.TranslationCallback,
         TipsDAO.TipsCallBack,
         YandexPredictorCallback,
-        YandexTranslateCallback {
+        YandexTranslateCallback, YandexDictionaryCallback {
 
     private static final int MIN_LENGTH_FOR_API_TIPS = 2;
     private static final int TIPS_COUNT = 5;
@@ -243,6 +245,12 @@ public class TranslationFragmentInteractorImpl
     public void onTranslateSuccess(Translation translation) {
         //Надо сохранить перевод в БД - попутно запишем в него ID
         translationDAO.saveTranslation(translation);
+
+//        Варианты перевода переехали в словарь, нужны ли они - ведь по сути когда человеку нужен перевод слова, ему нужен конкретный ответ а не множество
+//        YandexDictionaryHelper yandexDictionaryHelper = new YandexDictionaryHelper(this);
+//        yandexDictionaryHelper.getSupportLanguagesPairs();
+
+
         //Закешируем
         currentTranslation = translation;
         //Передадим в презентер
@@ -255,5 +263,20 @@ public class TranslationFragmentInteractorImpl
     @Override
     public void onTranslateAPIError(String errorMsg) {
         translationCallback.onError(errorMsg);
+    }
+
+    @Override
+    public void onDictionaryLanguagesSuccess(List<String> supportedPairs) {
+// пока не используем словарь
+    }
+
+    @Override
+    public void onLookupSuccess(DictionaryResponce dictionaryResponce) {
+// пока не используем словарь
+    }
+
+    @Override
+    public void onDictionaryAPIError(String errorMsg) {
+// пока не используем словарь
     }
 }

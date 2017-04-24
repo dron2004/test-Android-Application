@@ -1,9 +1,11 @@
 package ru.dron2004.translateapp.model;
 
+import java.io.Serializable;
+
 /**
  * Модель отображаемая на экране перевода
  */
-public class Translation {
+public class Translation implements Serializable {
     private long _id;
     private boolean favorite = false;
     public TranslateDirection translateDirection;

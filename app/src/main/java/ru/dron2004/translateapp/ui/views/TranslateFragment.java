@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +55,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     private ListAdapter tipsAdapter;
     private boolean tipsShow;
     private List<Language> languagesList;
+    private TextWatcher textWatcher;
 
 
     public TranslateFragment() {
@@ -136,7 +136,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
             buttonTranslate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO Возвращает фокус на первй элемент на фрагменте а это и есть EditText
                     textToTranslate.clearFocus();
                     getPresenter().translateText(getTextToTranslate());
                 }
@@ -148,18 +147,37 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                     showAddToFavoritesBtn(getPresenter().toggleFavorite());
                 }
             });
-            //Отправляем в презентер набираемый текст
-            textToTranslate.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            translatedTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    getPresenter().onTextToTranslateTyped(s.toString());
+                public void onClick(View v) {
+                    getPresenter().translateClicked();
                 }
-                @Override public void afterTextChanged(Editable s) {}
             });
+
+            initTextWatcher();
 
         }
 
+    }
+
+    private void deinitTextWatcher() {
+        //Отправляем в презентер набираемый текст
+        textToTranslate.removeTextChangedListener(textWatcher);
+    }
+
+    private void initTextWatcher() {
+        textWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                getPresenter().onTextToTranslateTyped(s.toString());
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        };
+
+        //Отправляем в презентер набираемый текст
+        textToTranslate.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -181,7 +199,10 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     @Override
     public void setTextToTranslate(String text) {
+        deinitTextWatcher();
         textToTranslate.setText(text);
+        textToTranslate.setSelection(textToTranslate.length());
+        initTextWatcher();
     }
 
 
@@ -216,9 +237,8 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     public void showTipsList(List<String> tipsList) {
         //Сохранили подсказки
         this.tipsList = tipsList;
-        Log.d("happy","Tipsы привалили:"+tipsList);
+//        Log.d("happy","Tipsы привалили:"+tipsList);
         if (getActivity() != null) {
-            Log.d("happy","Activity OK");
             showPopUpListView(textToTranslate.getText().toString());
         }
     }
@@ -226,15 +246,15 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     private void showPopUpListView(String before) {
         if (popUpWindow == null) {
-            Log.d("happy","PopUp was NULL - create to activity:"+getActivity());
+//            Log.d("happy","PopUp was NULL - create to activity:"+getActivity());
             popUpWindow = new ListPopupWindow(getActivity());
         }
-        //TODO при первом запуске на устроястве PopUp не отображается :(
+        //при первом запуске на устройстве PopUp не отображается :( - вроде поправил
 //        if (popUpWindow.isShowing()) {
 //            Log.d("happy","PopUp is show - change ADAPTER");
 //            popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
 //        } else {
-            Log.d("happy","PopUp need to show - create new tipsAdapter and show");
+//            Log.d("happy","PopUp need to show - create new tipsAdapter and show");
             popUpWindow.setAnchorView(textToTranslate);
             popUpWindow.setVerticalOffset(getActivity().getResources().getDimensionPixelOffset(R.dimen.tips_popup_vertical_offset));
             popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
@@ -243,9 +263,13 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     String tipSelected = ((TipsAdapter) parent.getAdapter()).getSelectedTip(position);
                     tipsList.clear();
+                    popUpWindow.dismiss();
+                    //Отключаем слушателя текста на момент изменения текста программно
+                    deinitTextWatcher();
                     textToTranslate.setText(tipSelected);
                     textToTranslate.setSelection(textToTranslate.length());
-                    popUpWindow.dismiss();
+                    //Подключаем слушателя текста обратно
+                    initTextWatcher();
                 }
             });
             popUpWindow.show();
@@ -256,7 +280,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
         if (popUpWindow != null) {
             popUpWindow.dismiss();
             popUpWindow = null;
-            Log.d("happy", "PopUp is Dissmissed");
+//            Log.d("happy", "PopUp is Dissmissed");
         }
     }
 
@@ -294,9 +318,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 } else {
                     //Если подсказка не соответсвует слову
                     //Начало слова
-                    //TODO СЛОМАЛОСЬ!!!!!!!!!!! калина
-                    //TODO После установки не показываются подсказки - проблемма в отображении POPUP (1ый раз!)
-
                     int lengthBefore = before.length() - wordBegin.length();
                     if (lengthBefore > 0) {
                         newBefore = before.substring(0, lengthBefore - 1);
@@ -313,7 +334,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
             }
             SpannableString tipSpanned = new SpannableString(newBefore + addonSpace + newTip);
-            Log.d("happy","text: |"+tipSpanned+"| newBefore:|"+newBefore+"| newTip:|"+newTip+"| lastSpanned:"+lastSpanned);
+//            Log.d("happy","text: |"+tipSpanned+"| newBefore:|"+newBefore+"| newTip:|"+newTip+"| lastSpanned:"+lastSpanned);
             tipSpanned.setSpan(new ForegroundColorSpan(Color.BLUE), startSpanned, lastSpanned,0);
             tipsSpanned.add(tipSpanned);
             if (needToAddTip) {
@@ -327,8 +348,10 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     @Override
     public void setTranslateDirection(TranslateDirection dir) {
-        spinnerFrom.setSelection(languagesList.indexOf(dir.from),true);
-        spinnerTo.setSelection(languagesList.indexOf(dir.to),true);
+        if (dir != null) {
+            spinnerFrom.setSelection(languagesList.indexOf(dir.from), true);
+            spinnerTo.setSelection(languagesList.indexOf(dir.to), true);
+        }
     }
 
     @Override

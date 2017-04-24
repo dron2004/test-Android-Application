@@ -3,9 +3,10 @@ package ru.dron2004.translateapp.ui.views;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private static final String TRANSLATE_FRAGMENT = "Translate Fragment";
     private static final String HISTORY_FRAGMENT = "History Fragment";
     private static final String SETTING_FRAGMENT = "Setting Fragment";
+    private static final String TAG = "TEST TAG";
     private String lastShowingFragment;
     private String showingFragment;
     private BottomNavigationView navigation;
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         if (savedInstanceState == null){
             presenter.firstStart();
         }
-        Log.d("happy","Activity onCreate");
 
     }
 
@@ -73,7 +74,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             finish();
         } else {
+            FragmentManager manager = getSupportFragmentManager();
+            Fragment currentFragment = manager.findFragmentById(R.id.placeForFragment);
 
+            if (currentFragment instanceof TranslateFragment)
+                navigation.getMenu().getItem(0).setChecked(true);
+            else if (currentFragment instanceof FavoriteFragment)
+                navigation.getMenu().getItem(1).setChecked(true);
+            else if (currentFragment instanceof AboutFragment)
+                navigation.getMenu().getItem(2).setChecked(true);
         }
     }
 
@@ -81,33 +90,33 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void showTranslateFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeForFragment, new TranslateFragment());
-        transaction.addToBackStack(TRANSLATE_FRAGMENT);
+        transaction.addToBackStack(TAG);
         lastShowingFragment = showingFragment;
         showingFragment = TRANSLATE_FRAGMENT;
         transaction.commit();
-        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
+//        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
     }
 
     @Override
     public void showFavoritesFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeForFragment, new FavoriteFragment());
-        transaction.addToBackStack(HISTORY_FRAGMENT);
+        transaction.addToBackStack(TAG);
         lastShowingFragment = showingFragment;
         showingFragment = HISTORY_FRAGMENT;
         transaction.commit();
-        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
+//        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
     }
 
     @Override
     public void showAboutFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.placeForFragment, new AboutFragment());
-        transaction.addToBackStack(SETTING_FRAGMENT);
+        transaction.addToBackStack(TAG);
         lastShowingFragment = showingFragment;
         showingFragment = SETTING_FRAGMENT;
         transaction.commit();
-        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
+//        Log.d("happy","Count fragments:"+getSupportFragmentManager().getBackStackEntryCount());
     }
 
     @Override
@@ -118,5 +127,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     public void showError(String message) {
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+        finish();
     }
 }

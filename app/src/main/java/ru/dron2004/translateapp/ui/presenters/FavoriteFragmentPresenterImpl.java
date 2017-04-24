@@ -1,10 +1,13 @@
 package ru.dron2004.translateapp.ui.presenters;
 
+import android.content.Intent;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import ru.dron2004.translateapp.interactors.FavoriteFragmentInteactor;
 import ru.dron2004.translateapp.model.Translation;
+import ru.dron2004.translateapp.ui.views.DetailActivity;
 import ru.dron2004.translateapp.ui.views.FavoriteFragmentView;
 
 public class FavoriteFragmentPresenterImpl implements FavoriteFragmentPresenter, FavoriteFragmentInteactor.HistoryCallback {
@@ -69,28 +72,52 @@ public class FavoriteFragmentPresenterImpl implements FavoriteFragmentPresenter,
         inteactor.removeTranslation(translation);
     }
 
+    @Override
+    public void showTranslation(Translation translation) {
+        if (view != null) {
+            FavoriteFragmentView v = view.get();
+            if (v != null) {
+                Intent intent = new Intent(v.getActivity(),DetailActivity.class);
+                intent.putExtra("TRANSLATION",translation);
+                v.getActivity().startActivity(intent);
+            }
+        }
+    }
+
 
     //Возврат истории
     @Override
     public void onHistorySuccess(List<Translation> translationList) {
         //Закешируем список переводов
         this.translationsList = translationList;
-        FavoriteFragmentView v = view.get();
-        if (v != null) {
-            if (translationList.size() > 0)
-                v.setHistory(translationList);
-            else
-                v.setEmptyHistory();
+        if (view != null) {
+            FavoriteFragmentView v = view.get();
+            if (v != null) {
+                if (translationList.size() > 0)
+                    v.setHistory(translationList);
+                else
+                    v.setEmptyHistory();
+            }
         }
     }
 
     @Override
     public void onHistoryEmpty() {
-
+        if (view != null) {
+            FavoriteFragmentView v = view.get();
+            if (v != null) {
+                v.setEmptyHistory();
+            }
+        }
     }
 
     @Override
     public void onHistoryError(String errorMsg) {
-
+        if (view != null) {
+            FavoriteFragmentView v = view.get();
+            if (v != null) {
+                v.showError(errorMsg);
+            }
+        }
     }
 }
