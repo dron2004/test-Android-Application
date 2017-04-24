@@ -3,6 +3,7 @@ package ru.dron2004.translateapp.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,18 @@ public abstract class _BaseFragment<PI extends _BasePresenter> extends Fragment 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Как только VIEW готова - подписываем презентер на нее
-        getPresenter().setView(getFragment());
+        //НЕ ТУТ -> onStart
+//        getPresenter().setView(getFragment());
 //        Log.d("happy","["+TAG+"] Presenter set View");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Именно тут - при возврате из другой активности View не пересоздается!
+        getPresenter().setView(getFragment());
+        Log.d("happy","["+TAG+"] Presenter set View onStart");
+
     }
 
     @Override

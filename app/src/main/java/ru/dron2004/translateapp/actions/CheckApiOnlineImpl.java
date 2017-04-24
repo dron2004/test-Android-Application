@@ -25,7 +25,7 @@ public class CheckApiOnlineImpl implements CheckApiOnline, YandexPredictorCallba
 
     @Override
     public boolean checkInternetPermission() {
-        //Всегла разрешено - не опастное
+        //Всегла разрешено - не опасное
         //Выше API23 не запрашивается в рантайме
         //Ниже API23 запрашивается при установке
         return true;

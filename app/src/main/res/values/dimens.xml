@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="max_text_size">65sp</dimen>
-    <dimen name="max_text_width">200dp</dimen>
+    <dimen name="max_text_width">300dp</dimen>
     <dimen name="tips_popup_vertical_offset">5dp</dimen>
     <dimen name="ic_clear_margin">40dp</dimen>
 </resources>

@@ -101,11 +101,23 @@ public class TranslateFragmentPresenterImpl
                     v.showTranslateBtn();
                     interactor.getTipsForText(text);
                 } else {
+                    //Если пришел пустой текст
+                    //Скрыть кнопку перевода
                     v.hideTranslateBtn();
+                    //Скрыть прогресс загрузки
                     v.hideTipsLoadingProgress();
+                    //Скрыть попап подсказок
                     v.hideTipsList();
+                    //Обнулить перевод если был
+                    if (currentTranslation != null) {
+                        currentTranslation = null;
+                        v.setTranslatedText("");
+                        v.hideAddToFavoritesBtn();
+                    }
                 }
             }
+        } else {
+            Log.d("happy","VIEW IS NULL");
         }
     }
 
@@ -150,7 +162,7 @@ public class TranslateFragmentPresenterImpl
     public void onTipsSuccess(final List<String> response) {
         //Сохраним в презентере для перестраения фрагмента
         tipsList = response;
-        Log.d("happy","Cached Tips:"+tipsList);
+//        Log.d("happy","Cached Tips:"+tipsList);
         //Подсказки получены - берите
         if (view  != null) {
             final TranslateFragmentView v = view.get();
@@ -168,10 +180,21 @@ public class TranslateFragmentPresenterImpl
     }
 
     @Override
-    public void onError(String errorMsg) {
-        TranslateFragmentView v = view.get();
-        if (v != null)
-            v.showError(errorMsg);
+    public void onError(final String errorMsg) {
+        if (view  != null) {
+            final TranslateFragmentView v = view.get();
+            if (v != null) {
+                v.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Ошибка могла возникнуть в момент подбора подсказок - Скрыть прогресс
+                        v.hideTipsLoadingProgress();
+                        //Отобразить ошибку
+                        v.showError(errorMsg);
+                    }
+                });
+            }
+        }
     }
 
     @Override

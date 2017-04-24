@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         />
     <TextView
+        android:padding="8dp"
         android:visibility="gone"
         android:id="@+id/historyEmptyView"
         android:layout_gravity="center"

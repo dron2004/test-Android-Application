@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void showError(String message) {
+        //Сюда приходят катастрофические ошибки, для не катастрофических есть обработчики во фрагментах
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
         finish();
     }

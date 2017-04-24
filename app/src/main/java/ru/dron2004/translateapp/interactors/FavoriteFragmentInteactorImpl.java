@@ -53,12 +53,12 @@ public class FavoriteFragmentInteactorImpl implements FavoriteFragmentInteactor,
     //Возврат переводов из БД
     @Override
     public void onTranslationSuccess(Translation translation) {
-
+        //Not used here
     }
 
     @Override
     public void onTranslationError(String errorMsg) {
-
+        //Not used here
     }
 
     @Override
@@ -70,6 +70,7 @@ public class FavoriteFragmentInteactorImpl implements FavoriteFragmentInteactor,
 
     @Override
     public void onTranslationListError(String errorMsg) {
-
+        //Отобразим заглушку списка при ошибке получения
+        historyListner.onHistoryEmpty();
     }
 }

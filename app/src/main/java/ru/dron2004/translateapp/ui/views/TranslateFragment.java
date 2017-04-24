@@ -93,6 +93,7 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     public void onStart() {
         super.onStart();
         if (getActivity() != null) {
+//            Log.d("happy","OnStart Fragment");
             translatedTextView = (TextView) getView().findViewById(R.id.translatedTextView);
             textToTranslate = (EditText) getView().findViewById(R.id.textToTranslate);
             buttonTranslate = (Button) getView().findViewById(R.id.buttonTranslate);
@@ -155,11 +156,20 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
                 }
             });
 
+            textWatcher = new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    getPresenter().onTextToTranslateTyped(s.toString());
+                }
+                @Override public void afterTextChanged(Editable s) {}
+            };
+
             initTextWatcher();
 
         }
-
     }
+
 
     private void deinitTextWatcher() {
         //Отправляем в презентер набираемый текст
@@ -167,15 +177,6 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
     }
 
     private void initTextWatcher() {
-        textWatcher = new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                getPresenter().onTextToTranslateTyped(s.toString());
-            }
-            @Override public void afterTextChanged(Editable s) {}
-        };
-
         //Отправляем в презентер набираемый текст
         textToTranslate.addTextChangedListener(textWatcher);
     }
@@ -208,7 +209,11 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 
     @Override
     public void setTranslatedText(String text) {
-        yandexTranslateCopy.setText(LocaleUtils.getLocaleStringResource(R.string.yandex_translate_copy));
+        if (!text.trim().isEmpty()) {
+            yandexTranslateCopy.setText(LocaleUtils.getLocaleStringResource(R.string.yandex_translate_copy));
+        } else {
+            yandexTranslateCopy.setText("");
+        }
         translatedTextView.setText(text.trim());
         KeyBoardUtils.hide(getActivity());
     }
@@ -249,31 +254,21 @@ public class TranslateFragment extends _BaseFragment<TranslateFragmentPresenter>
 //            Log.d("happy","PopUp was NULL - create to activity:"+getActivity());
             popUpWindow = new ListPopupWindow(getActivity());
         }
-        //при первом запуске на устройстве PopUp не отображается :( - вроде поправил
-//        if (popUpWindow.isShowing()) {
-//            Log.d("happy","PopUp is show - change ADAPTER");
-//            popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
-//        } else {
-//            Log.d("happy","PopUp need to show - create new tipsAdapter and show");
-            popUpWindow.setAnchorView(textToTranslate);
-            popUpWindow.setVerticalOffset(getActivity().getResources().getDimensionPixelOffset(R.dimen.tips_popup_vertical_offset));
-            popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
-            popUpWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String tipSelected = ((TipsAdapter) parent.getAdapter()).getSelectedTip(position);
-                    tipsList.clear();
-                    popUpWindow.dismiss();
-                    //Отключаем слушателя текста на момент изменения текста программно
-                    deinitTextWatcher();
-                    textToTranslate.setText(tipSelected);
-                    textToTranslate.setSelection(textToTranslate.length());
-                    //Подключаем слушателя текста обратно
-                    initTextWatcher();
-                }
-            });
-            popUpWindow.show();
-//        }
+        popUpWindow.setAnchorView(textToTranslate);
+        popUpWindow.setVerticalOffset(getActivity().getResources().getDimensionPixelOffset(R.dimen.tips_popup_vertical_offset));
+        popUpWindow.setAdapter(createTipsAdapter(before,tipsList));
+        popUpWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String tipSelected = ((TipsAdapter) parent.getAdapter()).getSelectedTip(position);
+                tipsList.clear();
+                popUpWindow.dismiss();
+                setTextToTranslate(tipSelected);
+                //Включаем кнопку перевода - текст то мы подставили
+                showTranslateBtn();
+            }
+        });
+        popUpWindow.show();
     }
 
     private void hidePopUpListView(){

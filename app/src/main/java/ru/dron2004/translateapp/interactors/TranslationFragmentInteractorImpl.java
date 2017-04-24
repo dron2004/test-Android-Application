@@ -4,6 +4,7 @@ package ru.dron2004.translateapp.interactors;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.dron2004.translateapp.R;
 import ru.dron2004.translateapp.app.MainApplication;
 import ru.dron2004.translateapp.model.Language;
 import ru.dron2004.translateapp.model.PackageModel;
@@ -24,6 +25,7 @@ import ru.dron2004.translateapp.storage.dao.TipsDAOImpl;
 import ru.dron2004.translateapp.storage.dao.TranslationDAO;
 import ru.dron2004.translateapp.storage.dao.TranslationDAOImpl;
 import ru.dron2004.translateapp.utility.LocaleUtils;
+import ru.dron2004.translateapp.utility.NetworkUtils;
 
 public class TranslationFragmentInteractorImpl
         implements TranslationFragmentInteractor,
@@ -143,8 +145,12 @@ public class TranslationFragmentInteractorImpl
     public void getTranslation(String text) {
         Translation translation = translationDAO.getTranslation(text,translateDirection);
         if (translation == null) {
-            YandexTranslateHelper translateHelper = new YandexTranslateHelper(this, LocaleUtils.getLocale());
-            translateHelper.getTranslation(text,translateDirection);
+            if ( NetworkUtils.checkIsOnline()) {
+                YandexTranslateHelper translateHelper = new YandexTranslateHelper(this, LocaleUtils.getLocale());
+                translateHelper.getTranslation(text, translateDirection);
+            } else {
+                translationCallback.onError(LocaleUtils.getLocaleStringResource(R.string.no_internet_connection));
+            }
         } else {
             //Перевод нашелся в БД
             translationCallback.onTranslateSuccess(translation);
@@ -214,11 +220,15 @@ public class TranslationFragmentInteractorImpl
         //Подсказок не найдено
         // запросить в API Predictor
         // если текст длиной более MIN_LENGTH
-        if (text.length() > MIN_LENGTH_FOR_API_TIPS) {
-            YandexPredictorHelper predictorHelper = new YandexPredictorHelper(this);
-            predictorHelper.getTipForText(text, language,TIPS_COUNT);
+        if ( NetworkUtils.checkIsOnline()) {
+            if (text.length() > MIN_LENGTH_FOR_API_TIPS) {
+                YandexPredictorHelper predictorHelper = new YandexPredictorHelper(this);
+                predictorHelper.getTipForText(text, language, TIPS_COUNT);
+            } else {
+                tipsCallBack.onTipsSuccess(new ArrayList<String>());
+            }
         } else {
-           tipsCallBack.onTipsSuccess(new ArrayList<String>());
+            tipsCallBack.onError(LocaleUtils.getLocaleStringResource(R.string.no_internet_connection));
         }
     }
 
@@ -249,7 +259,6 @@ public class TranslationFragmentInteractorImpl
 //        Варианты перевода переехали в словарь, нужны ли они - ведь по сути когда человеку нужен перевод слова, ему нужен конкретный ответ а не множество
 //        YandexDictionaryHelper yandexDictionaryHelper = new YandexDictionaryHelper(this);
 //        yandexDictionaryHelper.getSupportLanguagesPairs();
-
 
         //Закешируем
         currentTranslation = translation;
